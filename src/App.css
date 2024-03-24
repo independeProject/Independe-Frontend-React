@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    html {
+        font-size: 62.5%;
+        height: 100%;
+    }
+    .pointer {
+        cursor: pointer;
+    }
+    .user-button {
+        background: #ecf6ed;
+        border-radius: 5px;
+        color: #5e913b;
+    }
+    .user-button:hover {
+        transition: all 0.3s ease;
+        opacity: 0.55;
+    }
+    .rounded-box {
+        border: 2px solid #c7c9cd; /* 테두리 설정 */
+        border-radius: 50px; /* 오른쪽 아래 모서리만 둥글게 설정 */
+    }
+
+    .iframeContainer {
+        position: relative;
+        width: 100%;
+        height: 0;
+    }
+    /* 16:9 */
+    .iframe16To9 {
+        padding-top: 56.25%;
+    }
+    /* 4:3 */
+    .iframe4To3 {
+        padding-top: 75%;
+    }
+    .iframeContainer iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+    .font-13 {
+        font-size: 1.3rem;
+    }
+    .font-14 {
+        font-size: 1.4rem;
+    }
+    .font-16 {
+        font-size: 1.6rem;
+    }
+    .font-18 {
+        font-size: 1.8rem;
+    }
+    .font-20 {
+        font-size: 2rem;
+    }
+    .font-22 {
+        font-size: 2.2rem;
+    }
+    .font-24 {
+        font-size: 2.4rem;
+    }
+    .font-26 {
+        font-size: 2.6rem;
+    }
+    .font-28 {
+        font-size: 2.8rem;
+    }
+    .font-32 {
+        font-size: 3.2rem;
+    }
+    .font-40 {
+        font-size: 4rem;
+    }
+    .font-62 {
+        font-size: 6.2rem;
+    }
+    .font-64 {
+        font-size: 6.4rem;
+    }
+    .font-68 {
+        font-size: 6.8rem;
+    }
+
+    /* font-weight */
+    .font-regular {
+        font-weight: 300;
+    }
+    .font-regular-400 {
+        font-weight: 400;
+    }
+    .font-bold {
+        font-weight: 700;
+    }
+    .font-semi-bold {
+        font-weight: 600;
+    }
+    .font-medium {
+        font-weight: 500;
+    }
+    .font-extra-light {
+        font-weight: 200;
+    }
+
+    /* Color */
+    .color-gray-c7 {
+        color: #c7c9cd;
+    }
+    .color-green-5e {
+        color: #5e913b;
+    }
+}
