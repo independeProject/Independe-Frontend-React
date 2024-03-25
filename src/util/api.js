@@ -29,3 +29,13 @@ export async function nickUniquePost(data) {
         throw error;
     }
 }
+
+export async function idUniquePost(data) {
+    try {
+        const response = await axiosInstance.post("/api/members/username", data);
+        return response.data;
+    } catch (error) {
+        console.error("idUniquePost API error:", error);
+        throw error;
+    }
+}
