@@ -10,6 +10,74 @@
     .pointer {
         cursor: pointer;
     }
+    .input-box {
+        position: relative;
+        width: 300px;
+        margin-left: 50px;
+        margin-top: 100px;
+    }
+
+    .input-text {
+        font-size: 15px;
+        color: #222222;
+        width: 300px;
+        border: none;
+        border-bottom: solid #aaaaaa 1px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        position: relative;
+        background: none;
+        z-index: 5;
+    }
+
+    .input-text::placeholder {
+        color: #aaaaaa;
+    }
+
+    .input-text:focus {
+        outline: none;
+    }
+
+    .input-span {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0%;
+        background-color: #666;
+        width: 0;
+        height: 2px;
+        border-radius: 2px;
+        transition: 0.5s;
+    }
+
+    .input-label {
+        position: absolute;
+        color: #aaa;
+        left: 10px;
+        font-size: 20px;
+        bottom: 8px;
+        transition: all 0.2s;
+    }
+
+    .input-text:focus ~ .input-label,
+    .input-text:valid ~ .input-label {
+        font-size: 16px;
+        bottom: 40px;
+        color: #666;
+        font-weight: bold;
+    }
+
+    .input-text:focus ~ .input-span,
+    .input-text:valid ~ .input-span {
+        width: 100%;
+    }
+    input::placeholder {
+        color: #aaaaaa;
+    }
+    input:focus {
+        outline: none;
+    }
+
     .user-button {
         background: #ecf6ed;
         border-radius: 5px;

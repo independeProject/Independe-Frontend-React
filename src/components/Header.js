@@ -92,17 +92,17 @@ const Header = () => {
                         검색
                         <Icon icon={IoIosSearch} size={20} />
                     </FlexBox> */}
-                    <button className="user-button select-none flex items-center px-[7px] py-[4px] mr-[4px]">
-                        <Icon icon={FaRegUser} size={15} />
-                        <div className="ml-1">로그인</div>
+                    <button className="user-button select-none flex items-center px-[7px] py-[4px] mr-[8px] md:p-[10px]">
+                        <Icon icon={FaRegUser} size={12} />
+                        <div className="ml-2 md:font-16">로그인</div>
                     </button>
                     <button
-                        className="user-button select-none flex items-center px-[7px] py-[4px]"
+                        className="user-button select-none flex items-center px-[7px] py-[4px] md:p-[10px]"
                         onClick={() => {
                             goJoin();
                         }}
                     >
-                        <div className="ml-1">회원가입</div>
+                        <div className="md:font-16">회원가입</div>
                     </button>
                 </FlexBox>
             </FlexBox>
