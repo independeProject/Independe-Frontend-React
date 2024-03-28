@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 @layer utilities {
     html {
@@ -9,6 +10,14 @@
     }
     .pointer {
         cursor: pointer;
+    }
+    .custom-tab {
+        border-radius: 5px;
+        padding: 8px;
+    }
+    .custom-tab-hover:hover {
+        transition: all 0.5s ease;
+        opacity: 0.55;
     }
     .input-box {
         position: relative;

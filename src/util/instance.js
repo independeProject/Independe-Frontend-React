@@ -2,23 +2,27 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
     // baseURL: "http://13.209.65.163:8080",
+    //api계정키
 });
 
 axiosInstance.interceptors.request.use(
-    function (config) {
-        config.headers.Authorization = "Bearer your_access_token";
+    (config) => {
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+            config.headers.Authorization = `${token}`;
+        }
         return config;
     },
-    function (error) {
+    (error) => {
         return Promise.reject(error);
     }
 );
 
 axiosInstance.interceptors.response.use(
-    function (response) {
+    (response) => {
         return response;
     },
-    function (error) {
+    async (error) => {
         return Promise.reject(error);
     }
 );

@@ -1,13 +1,15 @@
 import React from "react";
 
-const Button = ({ type, onClick, text }) => {
-    return type === "normal" ? (
-        <button className="border-2 px-[12px] py-[8px] rounded-lg text-[#808080]" onClick={onClick}>
-            {text}
-        </button>
-    ) : (
+const Button = ({ type, onClick, text, className }) => {
+    const buttonClassName = `border-2 px-[12px] py-[8px] rounded-lg ${className}`;
+    const normalButtonClassName = "text-[#808080]";
+    const greenButtonClassName = "bg-[#5e913b] border-[#5e913b] text-white";
+
+    return (
         <button
-            className="bg-[#5e913b] border-2 border-[#5e913b] px-[12px] py-[8px] rounded-lg text-white"
+            className={`${buttonClassName} ${
+                type === "normal" ? normalButtonClassName : greenButtonClassName
+            }`}
             onClick={onClick}
         >
             {text}
