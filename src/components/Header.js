@@ -8,6 +8,9 @@ import FlexBox from "./FlexBox";
 import Icon from "./Icon";
 
 const Header = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("user");
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -17,6 +20,17 @@ const Header = () => {
 
     const goJoin = () => {
         navigate("/join");
+    };
+    const goLogin = () => {
+        navigate("/login");
+    };
+    const goLogout = () => {
+        const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
+        if (confirmLogout) {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("user");
+            window.location.reload();
+        }
     };
 
     const navMenuClick = (index, link) => {
@@ -33,7 +47,7 @@ const Header = () => {
         {
             index: 1,
             title: "게시판",
-            link: "/boardoard",
+            link: "/board",
         },
         {
             index: 2,
@@ -65,13 +79,16 @@ const Header = () => {
                     <Nav className="h-full flex hidden lg:inline-flex">
                         {headerMenu.map((item, index) => (
                             <Nav.Item key={index} className="h-full">
-                                <FlexBox className="h-full font-medium">
+                                <FlexBox className="h-full font-medium h-full flex items-center font-18">
                                     <Nav.Link
                                         onClick={() => {
                                             navMenuClick(index, item.link);
                                         }}
-                                        className="h-full py-[0] px-[25px] flex items-center font-18"
                                         style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            padding: "0 20px",
+                                            height: "100%",
                                             color: tabCurrent === index ? "#5e913b" : "black",
                                             borderBottom:
                                                 tabCurrent === index
@@ -88,22 +105,42 @@ const Header = () => {
                     </Nav>
                 </FlexBox>
                 <FlexBox>
-                    {/* <FlexBox className="hidden lg:inline-flex md:mr-[20px]">
-                        검색
-                        <Icon icon={IoIosSearch} size={20} />
-                    </FlexBox> */}
-                    <button className="user-button select-none flex items-center px-[7px] py-[4px] mr-[8px] md:p-[10px]">
-                        <Icon icon={FaRegUser} size={12} />
-                        <div className="ml-2 md:font-16">로그인</div>
-                    </button>
-                    <button
-                        className="user-button select-none flex items-center px-[7px] py-[4px] md:p-[10px]"
-                        onClick={() => {
-                            goJoin();
-                        }}
-                    >
-                        <div className="md:font-16">회원가입</div>
-                    </button>
+                    {accessToken ? (
+                        <>
+                            <button className="user-button select-none flex items-center px-[7px] py-[4px] mr-[8px] md:p-[10px]">
+                                <Icon icon={FaRegUser} size={12} />
+                                <div className="ml-2 md:font-16">{userId}</div>
+                            </button>
+                            <button
+                                className="user-button select-none flex items-center px-[7px] py-[4px] md:p-[10px]"
+                                onClick={() => {
+                                    goLogout();
+                                }}
+                            >
+                                <div className="md:font-16">로그아웃</div>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                className="user-button select-none flex items-center px-[7px] py-[4px] mr-[8px] md:p-[10px]"
+                                onClick={() => {
+                                    goLogin();
+                                }}
+                            >
+                                <Icon icon={FaRegUser} size={12} />
+                                <div className="ml-2 md:font-16">로그인</div>
+                            </button>
+                            <button
+                                className="user-button select-none flex items-center px-[7px] py-[4px] md:p-[10px]"
+                                onClick={() => {
+                                    goJoin();
+                                }}
+                            >
+                                <div className="md:font-16">회원가입</div>
+                            </button>
+                        </>
+                    )}
                 </FlexBox>
             </FlexBox>
         </BodyContainer>

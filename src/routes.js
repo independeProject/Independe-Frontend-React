@@ -1,4 +1,6 @@
 import Join from "./components/Join";
+import Login from "./components/Login";
+import MainBoard from "./screen/board/main";
 import MainPage from "./screen/main";
 
 const routes = [
@@ -9,6 +11,14 @@ const routes = [
     {
         path: "/join",
         element: <Join />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/board/*",
+        element: <MainBoard />,
     },
 ];
 

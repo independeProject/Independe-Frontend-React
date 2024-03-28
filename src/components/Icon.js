@@ -1,6 +1,9 @@
 import React from "react";
 
 const Icon = ({ icon, color, size, marginTop }) => {
+    if (icon === undefined) {
+        return;
+    }
     const iconStyle = {
         color: color || "",
         fontSize: size || "1em",

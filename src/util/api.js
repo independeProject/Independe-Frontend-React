@@ -39,3 +39,33 @@ export async function idUniquePost(data) {
         throw error;
     }
 }
+
+export async function loginPost(data) {
+    try {
+        const response = await axiosInstance.post("/api/member/login", data);
+        return response;
+    } catch (error) {
+        console.error("loginPost API error:", error);
+        throw error;
+    }
+}
+
+export async function refreshTokenPost(data) {
+    try {
+        const response = await axiosInstance.post("/api/refreshToken", data);
+        return response.data;
+    } catch (error) {
+        console.error("refreshTokenPost API error:", error);
+        throw error;
+    }
+}
+
+export async function mainDataGet() {
+    try {
+        const response = await axiosInstance.get("/api/posts/main");
+        return response.data;
+    } catch (error) {
+        console.error("mainDataGet API error:", error);
+        throw error;
+    }
+}

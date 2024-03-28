@@ -16,7 +16,7 @@ const Footer = () => {
     ];
 
     return (
-        <BodyContainer className="footer border-t-[1px]">
+        <BodyContainer className="relative footer border-t-[1px] bg-white" style={{ zIndex: 5 }}>
             <div className="flex flex-col py-[30px] color-gray-c7 items-start md:items-center font-14">
                 <FlexBox className={"pb-2 flex-wrap"}>
                     {footerMenu.map((item, index) => (
