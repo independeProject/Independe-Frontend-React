@@ -1,5 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Footer from "./components/Footer.js";
 import Header from "./components/Header.js";
@@ -18,8 +20,6 @@ function App() {
         window.scrollTo(0, 0);
     }, [location.pathname]);
 
-    useLayoutEffect(() => {}, []);
-
     return (
         <div className="relative">
             {headerView && (
@@ -27,15 +27,22 @@ function App() {
                     <div className="fixed top-0 left-0 right-0" style={{ zIndex: "10" }}>
                         <Header />
                     </div>
-                    <div className="pt-[60px] md:pt-[90px] w-full" />
                 </>
             )}
-            <div className="relative h-[100vh]">
-                <Routes>
-                    {routes.map((route, index) => (
-                        <Route key={index} path={route.path} element={<div>{route.element}</div>} />
-                    ))}
-                </Routes>
+            <div className="flex flex-col justify-between h-[100vh]">
+                <div>
+                    {headerView && <div className="pt-[60px] md:pt-[90px] w-full" />}
+                    <ToastContainer />
+                    <Routes>
+                        {routes.map((route, index) => (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={<div>{route.element}</div>}
+                            />
+                        ))}
+                    </Routes>
+                </div>
                 <Footer />
             </div>
         </div>

@@ -1,15 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "~bootstrap/dist/css/bootstrap.min.css";
 
 @layer utilities {
     html {
         font-size: 62.5%;
         height: 100%;
     }
+    textarea:focus {
+        outline: none;
+    }
+
     .pointer {
         cursor: pointer;
+    }
+    .table-search {
+        border: 1px solid #c7c9cd;
+        border-radius: 5px;
+        padding: 4px 10px;
+    }
+    .post-box {
+        border: 1px solid #c7c9cd;
+        border-radius: 5px;
+        padding: 8px 12px;
+    }
+    .page-button {
+        padding: 5px 12px;
+        border-radius: 5px;
+    }
+    .page-button:hover {
+        transition: all 0.2s ease;
+        background: #ecf6ed;
     }
     .custom-tab {
         border-radius: 5px;
@@ -18,6 +39,9 @@
     .custom-tab-hover:hover {
         transition: all 0.5s ease;
         opacity: 0.55;
+    }
+    .custom-sub-tab {
+        border-radius: 20px;
     }
     .input-box {
         position: relative;
@@ -97,8 +121,8 @@
         opacity: 0.55;
     }
     .rounded-box {
-        border: 2px solid #c7c9cd; /* 테두리 설정 */
-        border-radius: 50px; /* 오른쪽 아래 모서리만 둥글게 설정 */
+        border: 2px solid #c7c9cd;
+        border-radius: 50px;
     }
 
     .iframeContainer {
@@ -121,6 +145,7 @@
         top: 0;
         left: 0;
     }
+
     .font-13 {
         font-size: 1.3rem;
     }

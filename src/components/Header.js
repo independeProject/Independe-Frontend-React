@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
 import { FaRegUser } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -34,8 +34,10 @@ const Header = () => {
     };
 
     const navMenuClick = (index, link) => {
-        setTabCurrent(index);
-        navigate(link);
+        if (tabCurrent !== index) {
+            setTabCurrent(index);
+            navigate(link);
+        }
     };
 
     const headerMenu = [
@@ -47,7 +49,7 @@ const Header = () => {
         {
             index: 1,
             title: "게시판",
-            link: "/board",
+            link: "/board/all/free",
         },
         {
             index: 2,
@@ -64,6 +66,14 @@ const Header = () => {
             : 2
     );
 
+    useLayoutEffect(() => {
+        if (location.pathname === "/") {
+            setTabCurrent(0);
+        } else if (location.pathname.includes("/board/")) {
+            setTabCurrent(1);
+        } else setTabCurrent(2);
+    }, [location.pathname]);
+
     return (
         <BodyContainer className="border-b-[1px] bg-white">
             <FlexBox justify="space-between" className="h-[60px] md:h-[90px]">
@@ -76,33 +86,35 @@ const Header = () => {
                         alt=""
                         className="h-[40px] md:h-[70px] md:mr-8 cursor-pointer"
                     />
-                    <Nav className="h-full flex hidden lg:inline-flex">
-                        {headerMenu.map((item, index) => (
-                            <Nav.Item key={index} className="h-full">
-                                <FlexBox className="h-full font-medium h-full flex items-center font-18">
-                                    <Nav.Link
-                                        onClick={() => {
-                                            navMenuClick(index, item.link);
-                                        }}
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            padding: "0 20px",
-                                            height: "100%",
-                                            color: tabCurrent === index ? "#5e913b" : "black",
-                                            borderBottom:
-                                                tabCurrent === index
-                                                    ? "2px solid #5e913b"
-                                                    : "2px solid  white",
-                                            transition: "color 0.3s, border-bottom 0.3s",
-                                        }}
-                                    >
-                                        {item.title}
-                                    </Nav.Link>
-                                </FlexBox>
-                            </Nav.Item>
-                        ))}
-                    </Nav>
+                    <div className="hidden lg:inline-flex h-full">
+                        <Nav className="flex">
+                            {headerMenu.map((item, index) => (
+                                <Nav.Item key={index} className="h-full">
+                                    <FlexBox className="h-full font-medium h-full flex items-center font-18">
+                                        <Nav.Link
+                                            onClick={() => {
+                                                navMenuClick(index, item.link);
+                                            }}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                padding: "0 20px",
+                                                height: "100%",
+                                                color: tabCurrent === index ? "#5e913b" : "black",
+                                                borderBottom:
+                                                    tabCurrent === index
+                                                        ? "2px solid #5e913b"
+                                                        : "2px solid  white",
+                                                transition: "color 0.3s, border-bottom 0.3s",
+                                            }}
+                                        >
+                                            {item.title}
+                                        </Nav.Link>
+                                    </FlexBox>
+                                </Nav.Item>
+                            ))}
+                        </Nav>
+                    </div>
                 </FlexBox>
                 <FlexBox>
                     {accessToken ? (
