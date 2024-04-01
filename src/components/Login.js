@@ -29,7 +29,8 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error("loginPost error:", error);
-            });
+            })
+            .finally(() => {});
     };
 
     return (

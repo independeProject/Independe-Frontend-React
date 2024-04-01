@@ -9,11 +9,9 @@ import reportWebVitals from "./reportWebVitals";
 const root = createRoot(document.getElementById("root"));
 root.render(
     <RecoilRoot>
-        <React.StrictMode>
-            <Router>
-                <App />
-            </Router>
-        </React.StrictMode>
+        <Router>
+            <App />
+        </Router>
     </RecoilRoot>
 );
 

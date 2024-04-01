@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImFire, ImHome } from "react-icons/im";
 import { IoMdPerson, IoMdPersonAdd } from "react-icons/io";
 import BodyContainer from "../components/BodyContainer";
@@ -11,11 +11,11 @@ const MainPage = () => {
     const [mainVideoArr, setMainVideoArr] = useState([]);
     const [todayMent, setTodayMent] = useState();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         window.scrollTo(0, 0);
     }, [videosData]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         mainDataGet()
             .then((res) => {
                 setVideosData(res.data.videoMainDtos);
@@ -26,7 +26,7 @@ const MainPage = () => {
             });
     }, []);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const sliceVideosData = videosData;
         const sliceResult = sliceVideosData.slice(0, 3);
         setMainVideoArr(sliceResult);
