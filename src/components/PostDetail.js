@@ -4,7 +4,7 @@ import { PiLink, PiStar } from "react-icons/pi";
 import { VscComment } from "react-icons/vsc";
 import { useParams } from "react-router-dom";
 import { Slide, toast } from "react-toastify";
-import { boardPostGet, parentCommentsPost } from "../util/api";
+import { boardPostGet, childCommentsPost, parentCommentsPost } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
@@ -14,18 +14,31 @@ const PostDetail = () => {
     const { id } = useParams();
     const [postData, setPostData] = useState(null);
     const [comment, setComment] = useState("");
-
-    console.log("^^postData", postData);
+    const userName = localStorage.getItem("user");
+    const [commentReply, setCommentReply] = useState("");
+    const [replyInput, setReplyInput] = useState([]);
 
     useLayoutEffect(() => {
         boardPostGet(id)
             .then((res) => {
-                setPostData(res.data.data);
+                setPostData({
+                    ...res.data.data,
+                    commentInput: false,
+                });
+                setReplyInput(Array(res.data.data.comments.length).fill(false));
             })
             .catch((error) => {
                 console.error("boardPostGet error:", error);
             });
     }, [id]);
+
+    const toggleCommentInput = (index) => {
+        setReplyInput((prevState) => {
+            const updatedInputs = [...prevState];
+            updatedInputs[index] = !updatedInputs[index];
+            return updatedInputs;
+        });
+    };
 
     const formatDate = (dateString, monthStart) => {
         const date = new Date(dateString);
@@ -41,21 +54,41 @@ const PostDetail = () => {
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
-    const commentAddClick = () => {
-        if (comment === "") {
-            return;
-        }
-        const params = {
-            postId: id,
-            content: comment,
-        };
-        parentCommentsPost(params)
-            .then((res) => {
-                console.log("^^res", res);
+    const commentAddClick = (type, parentId) => {
+        if (type === "comment") {
+            if (comment === "") {
+                return;
+            }
+
+            const params = {
+                postId: id,
+                content: comment,
+            };
+
+            parentCommentsPost(params)
+                .then((res) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("boardPostGet error:", error);
+                });
+        } else if (type === "reply") {
+            if (commentReply === "") {
+                return;
+            }
+
+            childCommentsPost({
+                postId: id,
+                parentId: parentId,
+                content: commentReply,
             })
-            .catch((error) => {
-                console.error("boardPostGet error:", error);
-            });
+                .then((res) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("childCommentsPost error:", error);
+                });
+        }
     };
 
     return (
@@ -117,12 +150,18 @@ const PostDetail = () => {
                             }}
                         />
                     </div>
-                    <FlexBox justify="end" className="py-[16px] gap-4 border-b">
-                        <Button type="board" onClick={() => {}} text={"삭제"}></Button>
-                        <Button type="board" onClick={() => {}} text={"수정"}></Button>
-                    </FlexBox>
-                    <div className="py-[24px] font-14">댓글수 {postData.commentCount}</div>
-                    <FlexBox className="flex gap-4 pb-[12px]">
+                    {postData.nickname === userName && (
+                        <>
+                            <FlexBox justify="end" className="py-[16px] gap-4 border-b">
+                                <Button type="board" onClick={() => {}} text={"삭제"}></Button>
+                                <Button type="board" onClick={() => {}} text={"수정"}></Button>
+                            </FlexBox>
+                        </>
+                    )}
+                    <div className="pt-[24px] pb-[10px] font-14">
+                        댓글수 {postData.commentCount}
+                    </div>
+                    <FlexBox className="flex gap-4 pb-[24px]">
                         <textarea
                             className="post-box font-16"
                             placeholder={"댓글을 작성해보세요."}
@@ -137,7 +176,7 @@ const PostDetail = () => {
                             className="w-[70px] h-[70px]"
                             type="board"
                             onClick={() => {
-                                commentAddClick();
+                                commentAddClick("comment");
                             }}
                             text={"등록"}
                         ></Button>
@@ -152,10 +191,36 @@ const PostDetail = () => {
                                             {parentComment.nickname}
                                             {formatDate(parentComment.createdDate, "comment")}
                                         </div>
-                                        <Icon icon={VscComment} size={13} onClick={() => {}} />
+                                        <Icon
+                                            icon={VscComment}
+                                            size={13}
+                                            onClick={() => toggleCommentInput(index)}
+                                        />
                                     </div>
                                     <div>{parentComment.content}</div>
                                 </div>
+                                {replyInput[index] && (
+                                    <FlexBox className="flex gap-4 py-[24px]">
+                                        <textarea
+                                            className="post-box font-16"
+                                            placeholder={"답글을 작성해보세요."}
+                                            value={commentReply}
+                                            rows={1}
+                                            onChange={(e) => {
+                                                setCommentReply(e.target.value);
+                                            }}
+                                            style={{ width: "100%", minHeight: "42px" }}
+                                        />
+                                        <Button
+                                            className="w-[70px] h-[42px]"
+                                            type="board"
+                                            onClick={() => {
+                                                commentAddClick("reply", parentComment.commentId);
+                                            }}
+                                            text={"등록"}
+                                        ></Button>
+                                    </FlexBox>
+                                )}
                                 {postData.comments
                                     .filter(
                                         (childComment) =>
