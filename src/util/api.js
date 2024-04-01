@@ -118,3 +118,13 @@ export async function parentCommentsPost(data) {
         throw error;
     }
 }
+
+export async function childCommentsPost(data) {
+    try {
+        const response = await axiosInstance.post("/api/comments/child/new", data);
+        return response;
+    } catch (error) {
+        console.error("childCommentsPost API error:", error);
+        throw error;
+    }
+}

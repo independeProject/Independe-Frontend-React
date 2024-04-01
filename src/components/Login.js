@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoImg from "../resource/images/header_logo.png";
@@ -23,8 +24,9 @@ const Login = () => {
 
         loginPost(loginData)
             .then((res) => {
+                const decodedToken = jwtDecode(res.headers.authorization);
                 localStorage.setItem("accessToken", res.headers.authorization);
-                localStorage.setItem("user", username);
+                localStorage.setItem("user", decodedToken.nickname);
                 goMain();
             })
             .catch((error) => {
