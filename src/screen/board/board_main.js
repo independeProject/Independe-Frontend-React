@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BodyContainer from "../../components/BodyContainer";
 import Table from "../../components/Table";
 import { regionBoardGet } from "../../util/api";
 
 const MainBoard = () => {
-    const boardCategory = [
+    const { local, category } = useParams();
+
+    const boardLocalData = [
         { title: "자유 게시판", link: "all", subTab: false },
         { title: "서울 이야기", link: "seoul", subTab: true },
         { title: "부산 이야기", link: "pusan", subTab: true },
@@ -51,17 +53,17 @@ const MainBoard = () => {
         setSubTabCurrent(index);
         setPageCurrent(1);
         setSearchText("");
-        const mainLink = boardCategory[tabCurrent].link;
+        const mainLink = boardLocalData[tabCurrent].link;
         setMainRoute(mainLink);
-        const subLink = boardCategory[tabCurrent].subTab ? route : "";
+        const subLink = boardLocalData[tabCurrent].subTab ? route : "";
         setSubRoute(subLink);
         navigate(`/board/${mainLink}/${subLink}`);
     };
 
     useEffect(() => {
         const params = {
-            regionType: mainRoute.toUpperCase(),
-            regionPostType: subRoute.toUpperCase(),
+            regionType: local.toUpperCase(),
+            regionPostType: category.toUpperCase(),
             condition: "no",
             keyword: searchText,
             pageable: { page: pageCurrent - 1, size: pageMax },
@@ -78,14 +80,29 @@ const MainBoard = () => {
             .finally(() => {
                 setSearchButton(false);
             });
-    }, [pageCurrent, mainRoute, subRoute, searchButton]);
+    }, [pageCurrent, local, category, searchButton]);
+
+    useEffect(() => {
+        const categoryIndex = boardLocalData.findIndex((item) => item.link === local);
+
+        if (categoryIndex !== -1 && boardLocalData[categoryIndex].subTab) {
+            setTabCurrent(categoryIndex);
+
+            const subTabIndex = subTabData.findIndex((item) => item.link === category);
+            if (subTabIndex !== -1) {
+                setSubTabCurrent(subTabIndex);
+            }
+        } else {
+            setTabCurrent(categoryIndex);
+        }
+    }, [local, category]);
 
     return (
         <BodyContainer>
             <div className="flex flex-col sm:flex-row py-[24px] gap-[12px] md:gap-14 border-b">
-                <div className="font-28 font-semi-bold">{boardCategory[tabCurrent].title} </div>
+                <div className="font-28 font-semi-bold">{boardLocalData[tabCurrent].title} </div>
                 <div className="flex justify-between sm:justify-start md:gap-[20px]">
-                    {boardCategory.map((item, index) => (
+                    {boardLocalData.map((item, index) => (
                         <div key={index}>
                             <button
                                 className={`custom-tab font-16 font-medium ${
@@ -104,7 +121,7 @@ const MainBoard = () => {
                     ))}
                 </div>
             </div>
-            {boardCategory[tabCurrent].subTab && (
+            {boardLocalData[tabCurrent].subTab && (
                 <div className="flex py-[16px] font-14 gap-[6px] md:gap-[16px] border-b">
                     {subTabData.map((item, index) => (
                         <div key={index}>
@@ -133,6 +150,8 @@ const MainBoard = () => {
                 setSearchText={setSearchText}
                 searchText={searchText}
                 setSearchButton={setSearchButton}
+                mainRoute={mainRoute}
+                subRoute={subRoute}
             ></Table>
         </BodyContainer>
     );

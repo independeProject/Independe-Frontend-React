@@ -34,6 +34,8 @@ const Table = ({
     setSearchText,
     searchText,
     setSearchButton,
+    mainRoute,
+    subRoute,
 }) => {
     const navigate = useNavigate();
     const pageMaxNum = Math.ceil(tableData.count / pageMax);
@@ -86,7 +88,11 @@ const Table = ({
                                         style={{ textAlign: "left" }}
                                         key={index}
                                         onClick={() => {
-                                            navigate(`/board/posts/${item.postId}`);
+                                            navigate(`/board/posts/${item.postId}`, {
+                                                state: {
+                                                    postId: item.postId,
+                                                },
+                                            });
                                         }}
                                     >
                                         <FlexRow className="border-b gap-[16px]">
@@ -161,7 +167,9 @@ const Table = ({
                 <Button
                     type="green"
                     onClick={() => {
-                        navigate("/write");
+                        navigate("/write", {
+                            state: { mainRoute: mainRoute, subRoute: subRoute },
+                        });
                     }}
                     text={"글쓰기"}
                 ></Button>

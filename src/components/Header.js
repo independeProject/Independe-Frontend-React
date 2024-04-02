@@ -71,7 +71,7 @@ const Header = () => {
             setTabCurrent(0);
         } else if (location.pathname.includes("/board/")) {
             setTabCurrent(1);
-        } else setTabCurrent(2);
+        } else if (location.pathname.includes("/life")) setTabCurrent(2);
     }, [location.pathname]);
 
     return (

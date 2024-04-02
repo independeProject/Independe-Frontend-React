@@ -3,15 +3,20 @@ import { BsChevronRight } from "react-icons/bs";
 import { PiLink, PiStar } from "react-icons/pi";
 import { VscComment } from "react-icons/vsc";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Slide, toast } from "react-toastify";
-import { boardPostGet, childCommentsPost, parentCommentsPost } from "../util/api";
+import { boardPostGet, childCommentsPost, parentCommentsPost, postDelete } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
 import Icon from "./Icon";
+import { useLocation } from "react-router-dom";
 
 const PostDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [postData, setPostData] = useState(null);
     const [comment, setComment] = useState("");
     const userName = localStorage.getItem("user");
@@ -91,6 +96,17 @@ const PostDetail = () => {
         }
     };
 
+    const deleteClick = () => {
+        const postId = parseInt(location.state.postId);
+        postDelete(postId)
+            .then((res) => {
+                navigate(-1);
+            })
+            .catch((error) => {
+                console.error("postDelete error:", error);
+            });
+    };
+
     return (
         <BodyContainer className="py-[24px]">
             <FlexBox justify="space-between">
@@ -153,8 +169,26 @@ const PostDetail = () => {
                     {postData.nickname === userName && (
                         <>
                             <FlexBox justify="end" className="py-[16px] gap-4 border-b">
-                                <Button type="board" onClick={() => {}} text={"삭제"}></Button>
-                                <Button type="board" onClick={() => {}} text={"수정"}></Button>
+                                <Button
+                                    type="board"
+                                    onClick={() => {
+                                        deleteClick();
+                                    }}
+                                    text={"삭제"}
+                                ></Button>
+                                <Button
+                                    type="board"
+                                    onClick={() => {
+                                        navigate("/write", {
+                                            state: {
+                                                title: postData.title,
+                                                content: postData.content,
+                                                postId: location.state.postId,
+                                            },
+                                        });
+                                    }}
+                                    text={"수정"}
+                                ></Button>
                             </FlexBox>
                         </>
                     )}
@@ -187,8 +221,8 @@ const PostDetail = () => {
                             <div key={index}>
                                 <div className="border-t py-[12px] font-13 px-[4px] ">
                                     <div className="pb-[6px] gap-4 flex justify-between">
-                                        <div>
-                                            {parentComment.nickname}
+                                        <div className="gap-4 flex">
+                                            <div>{parentComment.nickname}</div>
                                             {formatDate(parentComment.createdDate, "comment")}
                                         </div>
                                         <Icon
