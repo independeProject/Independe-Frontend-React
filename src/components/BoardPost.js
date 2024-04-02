@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PiNotePencil } from "react-icons/pi";
-import { useNavigate } from "react-router-dom";
-import { regionBoardPost } from "../util/api";
+import { useNavigate, useLocation } from "react-router-dom";
+import { regionBoardPost, postFixedPut } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
@@ -9,27 +9,57 @@ import Icon from "./Icon";
 
 const BoardPost = () => {
     const navigate = useNavigate();
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const location = useLocation();
 
-    const postClick = () => {
-        const data = {
-            title: title,
-            content: content,
-            regionType: "ALL",
-            regionPostType: "FREE",
-            files: [],
-        };
+    const [title, setTitle] = useState(location.state.title || "");
+    const [content, setContent] = useState(location.state.content || "");
+    const editMode = location.state.title ? true : false;
 
-        regionBoardPost(data)
-            .then((res) => {
-                if (res !== undefined) {
-                    navigate(-1);
-                }
-            })
-            .catch((error) => {
-                console.error("regionBoardPost error:", error);
-            });
+    const postClick = (type) => {
+        if (title === "" || content === "") {
+            return;
+        }
+
+        if (type === "new") {
+            const data = {
+                title: title,
+                content: content,
+                regionType: location.state.mainRoute.toUpperCase(),
+                regionPostType: location.state.subRoute.toUpperCase(),
+                files: [],
+            };
+
+            regionBoardPost(data)
+                .then((res) => {
+                    if (res !== undefined) {
+                        const main = location.state.mainRoute;
+                        const sub = location.state.subRoute;
+                        navigate(`/board/${main}/${sub}`);
+                    }
+                })
+                .catch((error) => {
+                    console.error("regionBoardPost error:", error);
+                });
+        }
+
+        if (type === "fixed") {
+            const data = {
+                postId: location.state.postId,
+                title: title,
+                content: content,
+                files: [],
+            };
+
+            postFixedPut(location.state.postId, data)
+                .then((res) => {
+                    if (res !== undefined) {
+                        navigate(-1);
+                    }
+                })
+                .catch((error) => {
+                    console.error("postFixedPut error:", error);
+                });
+        }
     };
 
     return (
@@ -75,9 +105,9 @@ const BoardPost = () => {
                     <Button
                         type="green"
                         onClick={() => {
-                            postClick();
+                            editMode ? postClick("fixed") : postClick("new");
                         }}
-                        text={"글 등록"}
+                        text={editMode ? "글 수정" : "글 등록"}
                     ></Button>
                 </FlexBox>
             </div>

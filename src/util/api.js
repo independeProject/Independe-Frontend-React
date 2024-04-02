@@ -128,3 +128,27 @@ export async function childCommentsPost(data) {
         throw error;
     }
 }
+
+export async function postFixedPut(postId, data) {
+    try {
+        const response = await axiosInstance.put(`/api/posts/${postId}`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error("postFixedPut API error:", error);
+        throw error;
+    }
+}
+
+export async function postDelete(postId) {
+    try {
+        const response = await axiosInstance.delete(`/api/posts/${postId}`, postId);
+        return response;
+    } catch (error) {
+        console.error("postFixedPut API error:", error);
+        throw error;
+    }
+}

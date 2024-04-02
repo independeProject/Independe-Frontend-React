@@ -2,7 +2,7 @@ import BoardPost from "./components/BoardPost";
 import Join from "./components/Join";
 import Login from "./components/Login";
 import PostDetail from "./components/PostDetail";
-import MainBoard from "./screen/board/main";
+import MainBoard from "./screen/board/board_main";
 import MainPage from "./screen/main";
 
 const routes = [
@@ -21,10 +21,6 @@ const routes = [
     {
         path: "/board/:local/:category",
         element: <MainBoard />,
-    },
-    {
-        path: "/write",
-        element: <BoardPost />,
     },
     {
         path: "/write",
