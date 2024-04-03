@@ -54,7 +54,7 @@ const Header = () => {
         {
             index: 2,
             title: "자취생활",
-            link: "/life",
+            link: "/life/clean",
         },
     ];
 

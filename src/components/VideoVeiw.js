@@ -11,7 +11,7 @@ const VideoVeiw = ({ mainVideoArr, title, subText, onClick }) => {
                 </button>
             </FlexBox>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[30px] pb-[40px]">
-                {mainVideoArr.map((item, index) => (
+                {mainVideoArr?.map((item, index) => (
                     <div key={index}>
                         <div className="iframeContainer iframe16To9" key={index}>
                             <iframe title={`main_video_${index}`} src={item.videoUrl}></iframe>

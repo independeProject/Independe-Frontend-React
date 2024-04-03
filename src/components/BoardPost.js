@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PiNotePencil } from "react-icons/pi";
 import { useNavigate, useLocation } from "react-router-dom";
-import { regionBoardPost, postFixedPut } from "../util/api";
+import { regionBoardPost, postFixedPut, lifeBoardPost } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
@@ -21,25 +21,45 @@ const BoardPost = () => {
         }
 
         if (type === "new") {
-            const data = {
-                title: title,
-                content: content,
-                regionType: location.state.mainRoute.toUpperCase(),
-                regionPostType: location.state.subRoute.toUpperCase(),
-                files: [],
-            };
+            if (location.state.subRoute !== undefined) {
+                const data = {
+                    title: title,
+                    content: content,
+                    regionType: location.state.mainRoute.toUpperCase(),
+                    regionPostType: location.state.subRoute.toUpperCase(),
+                    files: [],
+                };
 
-            regionBoardPost(data)
-                .then((res) => {
-                    if (res !== undefined) {
-                        const main = location.state.mainRoute;
-                        const sub = location.state.subRoute;
-                        navigate(`/board/${main}/${sub}`);
-                    }
-                })
-                .catch((error) => {
-                    console.error("regionBoardPost error:", error);
-                });
+                regionBoardPost(data)
+                    .then((res) => {
+                        if (res !== undefined) {
+                            const main = location.state.mainRoute;
+                            const sub = location.state.subRoute;
+                            navigate(`/board/${main}/${sub}`);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("regionBoardPost error:", error);
+                    });
+            } else {
+                const data = {
+                    title: title,
+                    content: content,
+                    independentPostType: location.state.mainRoute.toUpperCase(),
+                    files: [],
+                };
+
+                lifeBoardPost(data)
+                    .then((res) => {
+                        if (res !== undefined) {
+                            const main = location.state.mainRoute;
+                            navigate(`/life/${main}`);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("regionBoardPost error:", error);
+                    });
+            }
         }
 
         if (type === "fixed") {

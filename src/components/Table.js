@@ -37,8 +37,10 @@ const Table = ({
     mainRoute,
     subRoute,
 }) => {
+    const dataArr = tableData?.data || tableData;
+
     const navigate = useNavigate();
-    const pageMaxNum = Math.ceil(tableData.count / pageMax);
+    const pageMaxNum = Math.ceil(tableData?.count / pageMax) || 1;
 
     const formattedDate = (date) => {
         return new Date(date).toISOString().slice(0, 10);
@@ -81,14 +83,14 @@ const Table = ({
                             <FlexItem>추천수</FlexItem>
                             <FlexItem>조회수</FlexItem>
                         </FlexRow>
-                        {tableData && (
+                        {dataArr && (
                             <>
-                                {tableData?.data?.map((item, index) => (
+                                {dataArr?.map((item, index) => (
                                     <button
                                         style={{ textAlign: "left" }}
                                         key={index}
                                         onClick={() => {
-                                            navigate(`/board/posts/${item.postId}`, {
+                                            navigate(`/posts/${item.postId}`, {
                                                 state: {
                                                     postId: item.postId,
                                                 },
@@ -131,9 +133,9 @@ const Table = ({
                             <FlexItem flex={4}>제목</FlexItem>
                             <FlexItem flex={1}>작성자</FlexItem>
                         </FlexRow>
-                        {tableData && (
+                        {dataArr && (
                             <>
-                                {tableData?.data?.map((item, index) => (
+                                {dataArr?.map((item, index) => (
                                     <button style={{ textAlign: "left" }} key={index}>
                                         <FlexRow className="border-b gap-4">
                                             <FlexItem flex={4}>{item.title}</FlexItem>
@@ -174,7 +176,7 @@ const Table = ({
                     text={"글쓰기"}
                 ></Button>
             </FlexBox>
-            <FlexBox justify="center" className="py-[40px]">
+            <FlexBox justify="center" className="pb-[40px]">
                 {pageButtons()}
             </FlexBox>
         </>

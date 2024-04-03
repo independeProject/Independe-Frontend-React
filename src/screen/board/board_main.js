@@ -62,8 +62,8 @@ const MainBoard = () => {
 
     useEffect(() => {
         const params = {
-            regionType: local.toUpperCase(),
-            regionPostType: category.toUpperCase(),
+            regionType: local?.toUpperCase(),
+            regionPostType: category?.toUpperCase(),
             condition: "no",
             keyword: searchText,
             pageable: { page: pageCurrent - 1, size: pageMax },
@@ -112,7 +112,9 @@ const MainBoard = () => {
                                 }`}
                                 style={{ transition: "0.3s" }}
                                 onClick={() => {
-                                    tabClick(index, item.link);
+                                    if (tabCurrent !== index) {
+                                        tabClick(index, item.link);
+                                    }
                                 }}
                             >
                                 {item.title.substring(0, 2)}
@@ -133,7 +135,9 @@ const MainBoard = () => {
                                 }`}
                                 style={{ transition: "0.2s" }}
                                 onClick={() => {
-                                    subTabClick(index, item.link);
+                                    if (subTabCurrent !== index) {
+                                        subTabClick(index, item.link);
+                                    }
                                 }}
                             >
                                 {item.title.substring(0, 2)}
