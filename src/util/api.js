@@ -152,3 +152,31 @@ export async function postDelete(postId) {
         throw error;
     }
 }
+
+export async function lifeBoardGet(params) {
+    const { independentPostType, condition, keyword, pageable } = params;
+
+    try {
+        const response = await axiosInstance.get(`/api/posts/independent/${independentPostType}`, {
+            params: pageable,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("lifeBoardGet API error:", error);
+        throw error;
+    }
+}
+
+export async function lifeBoardPost(data) {
+    try {
+        const response = await axiosInstance.post("/api/posts/independent/new", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error("lifeBoardPost API error:", error);
+        throw error;
+    }
+}

@@ -2,7 +2,8 @@ import BoardPost from "./components/BoardPost";
 import Join from "./components/Join";
 import Login from "./components/Login";
 import PostDetail from "./components/PostDetail";
-import MainBoard from "./screen/board/board_main";
+import MainBoardPage from "./screen/board/board_main";
+import MainLifePage from "./screen/life/life_main";
 import MainPage from "./screen/main";
 
 const routes = [
@@ -20,15 +21,19 @@ const routes = [
     },
     {
         path: "/board/:local/:category",
-        element: <MainBoard />,
+        element: <MainBoardPage />,
     },
     {
         path: "/write",
         element: <BoardPost />,
     },
     {
-        path: "/board/posts/:id",
+        path: "/posts/:id",
         element: <PostDetail />,
+    },
+    {
+        path: "/life/:category",
+        element: <MainLifePage />,
     },
 ];
 
