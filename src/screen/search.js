@@ -13,8 +13,6 @@ const SearchPage = () => {
 
     const pageMax = 10;
 
-    console.log("^^location.state.keyWord", location.state.keyWord);
-
     useLayoutEffect(() => {
         const params = {
             keyword: location.state.keyWord,
