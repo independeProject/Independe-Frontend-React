@@ -2,15 +2,13 @@ import React, { useLayoutEffect, useState } from "react";
 import { BsChevronRight } from "react-icons/bs";
 import { PiLink, PiStar } from "react-icons/pi";
 import { VscComment } from "react-icons/vsc";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Slide, toast } from "react-toastify";
 import { boardPostGet, childCommentsPost, parentCommentsPost, postDelete } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
 import Icon from "./Icon";
-import { useLocation } from "react-router-dom";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -111,9 +109,9 @@ const PostDetail = () => {
         <BodyContainer className="py-[24px]">
             <FlexBox justify="space-between">
                 <FlexBox className="font-16 gap-4">
-                    <div>지역전체 </div>
+                    <div>{postData?.regionType || "자취정보"}</div>
                     <Icon icon={BsChevronRight} size={14} />
-                    <div>자유</div>
+                    <div>{postData?.regionPostType || postData?.independentPostType}</div>
                 </FlexBox>
                 <FlexBox>
                     <Icon

@@ -10,7 +10,56 @@
     textarea:focus {
         outline: none;
     }
-
+    .toggle-container {
+        left: 47%;
+    }
+    .toggle-label {
+        display: inline-block;
+        cursor: pointer;
+    }
+    .toggle-label-handle {
+        display: flex;
+        align-items: center;
+        width: 30px;
+        height: 18px;
+        border-radius: 20px;
+        padding: 0px 2px;
+    }
+    .toggle-label-handle::after {
+        content: "";
+        position: relative;
+        right: 0;
+        display: block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: white;
+        transition: right 0.4s ease-in-out;
+    }
+    .toggle-checked .toggle-label-handle::after {
+        right: calc(100% - 38px);
+    }
+    #toggle {
+        display: none;
+    }
+    .dropdown-container {
+        position: relative;
+    }
+    .dropdown-menu {
+        position: absolute;
+        border-radius: 5px;
+        top: -9px;
+        left: -9px;
+        display: none;
+        background: white;
+        padding: 8px;
+    }
+    .dropdown-item {
+        padding: 6px 7px;
+    }
+    .dropdown-container.active .dropdown-menu {
+        display: block;
+    }
     .pointer {
         cursor: pointer;
     }
@@ -146,6 +195,9 @@
         left: 0;
     }
 
+    .font-12 {
+        font-size: 1.2rem;
+    }
     .font-13 {
         font-size: 1.3rem;
     }
@@ -215,5 +267,9 @@
     }
     .color-green-5e {
         color: #5e913b;
+    }
+
+    .z-index-1 {
+        z-index: 1;
     }
 }

@@ -5,12 +5,13 @@ import { IoIosSearch } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoImg from "../resource/images/header_logo.png";
 import BodyContainer from "./BodyContainer";
+import DropdownMenu from "./DropdownMenu";
 import FlexBox from "./FlexBox";
 import Icon from "./Icon";
 
 const Header = () => {
     const accessToken = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("user");
+    const userNick = localStorage.getItem("user");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -40,6 +41,7 @@ const Header = () => {
             : 2
     );
     const [searchText, setSearchText] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
 
     const goMain = () => {
         navMenuClick(0, headerMenu[0].link);
@@ -51,6 +53,7 @@ const Header = () => {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("user");
             localStorage.removeItem("local");
+            localStorage.removeItem("localSwitchState");
 
             window.location.reload();
         }
@@ -68,6 +71,10 @@ const Header = () => {
     };
 
     const navMenuClick = (index, link) => {
+        if (location.pathname === "/search") {
+            setTabCurrent(index);
+            navigate(link);
+        }
         if (tabCurrent !== index) {
             setTabCurrent(index);
             navigate(link);
@@ -126,9 +133,10 @@ const Header = () => {
                 </FlexBox>
                 <FlexBox>
                     <div className="hidden sm:contents">
-                        <FlexBox className="table-search mr-[8px] md:font-14 mr-[20px]">
+                        <FlexBox className="table-search mr-[12px] md:font-14 mr-[20px]">
                             <input
                                 placeholder="검색어를 입력하세요."
+                                className="xl:w-[200px]"
                                 value={searchText}
                                 onChange={(e) => {
                                     setSearchText(e.target.value);
@@ -151,17 +159,23 @@ const Header = () => {
                     </div>
                     {accessToken ? (
                         <>
-                            <button className="user-button select-none flex items-center px-[7px] py-[6px] mr-[8px]">
-                                <Icon icon={FaRegUser} size={12} />
-                                <div className="ml-2 md:font-14">{userId}</div>
-                            </button>
+                            <DropdownMenu
+                                options={["내정보", "채팅", "위치인증"]}
+                                userNick={userNick}
+                                isOpen={isOpen}
+                                setIsOpen={setIsOpen}
+                            />
                             <button
-                                className="user-button select-none flex items-center px-[7px] py-[6px]"
+                                className="user-button select-none flex items-center px-[7px] py-[6px] z-index-1"
                                 onClick={() => {
-                                    goLogout();
+                                    if (!isOpen) {
+                                        goLogout();
+                                    }
                                 }}
                             >
-                                <div className="md:font-14">로그아웃</div>
+                                <div className="md:font-14 w-[35px] md:w-[49px]">
+                                    {isOpen ? "닫기" : "로그아웃"}
+                                </div>
                             </button>
                         </>
                     ) : (
