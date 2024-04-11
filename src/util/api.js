@@ -180,3 +180,20 @@ export async function lifeBoardPost(data) {
         throw error;
     }
 }
+
+export async function allSearchGet(params) {
+    const { keyword, pageable } = params;
+
+    try {
+        const response = await axiosInstance.get(`/api/posts/search`, {
+            params: {
+                keyword: keyword,
+                ...pageable,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("allSearchGet API error:", error);
+        throw error;
+    }
+}

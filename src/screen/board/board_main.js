@@ -71,6 +71,7 @@ const MainBoard = () => {
 
         regionBoardGet(params)
             .then((res) => {
+                console.log("^^res", res);
                 setTableData(res);
             })
             .catch((error) => {

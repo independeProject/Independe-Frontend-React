@@ -337,7 +337,7 @@ const Join = () => {
                                                                     [key]: targetValue,
                                                                 }));
                                                             }}
-                                                            onKeyDown={(e) => {
+                                                            onKeyUp={(e) => {
                                                                 if (e.key === "Enter") {
                                                                     e.preventDefault();
                                                                     uniqueCheck(key);

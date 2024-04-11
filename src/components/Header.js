@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
 import { FaRegUser } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoImg from "../resource/images/header_logo.png";
 import BodyContainer from "./BodyContainer";
@@ -10,35 +11,8 @@ import Icon from "./Icon";
 const Header = () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("user");
-
     const navigate = useNavigate();
     const location = useLocation();
-
-    const goMain = () => {
-        navMenuClick(0, headerMenu[0].link);
-    };
-
-    const goJoin = () => {
-        navigate("/join");
-    };
-    const goLogin = () => {
-        navigate("/login");
-    };
-    const goLogout = () => {
-        const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
-        if (confirmLogout) {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("user");
-            window.location.reload();
-        }
-    };
-
-    const navMenuClick = (index, link) => {
-        if (tabCurrent !== index) {
-            setTabCurrent(index);
-            navigate(link);
-        }
-    };
 
     const headerMenu = [
         {
@@ -65,9 +39,43 @@ const Header = () => {
             ? 1
             : 2
     );
+    const [searchText, setSearchText] = useState("");
+
+    const goMain = () => {
+        navMenuClick(0, headerMenu[0].link);
+    };
+
+    const goLogout = () => {
+        const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
+        if (confirmLogout) {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("user");
+            localStorage.removeItem("local");
+
+            window.location.reload();
+        }
+    };
+
+    const goSearch = () => {
+        if (searchText !== "") {
+            navigate("/search", {
+                state: {
+                    keyWord: searchText,
+                },
+            });
+            setSearchText("");
+        }
+    };
+
+    const navMenuClick = (index, link) => {
+        if (tabCurrent !== index) {
+            setTabCurrent(index);
+            navigate(link);
+        }
+    };
 
     useLayoutEffect(() => {
-        if (location.pathname === "/") {
+        if (location.pathname === "/" || location.pathname === "/search") {
             setTabCurrent(0);
         } else if (location.pathname.includes("/board/")) {
             setTabCurrent(1);
@@ -98,7 +106,7 @@ const Header = () => {
                                             style={{
                                                 display: "flex",
                                                 alignItems: "center",
-                                                padding: "0 20px",
+                                                padding: "0 18px",
                                                 height: "100%",
                                                 color: tabCurrent === index ? "#5e913b" : "black",
                                                 borderBottom:
@@ -117,39 +125,63 @@ const Header = () => {
                     </div>
                 </FlexBox>
                 <FlexBox>
+                    <div className="hidden sm:contents">
+                        <FlexBox className="table-search mr-[8px] md:font-14 mr-[20px]">
+                            <input
+                                placeholder="검색어를 입력하세요."
+                                value={searchText}
+                                onChange={(e) => {
+                                    setSearchText(e.target.value);
+                                }}
+                                onKeyUp={(e) => {
+                                    if (e.key === "Enter") {
+                                        goSearch();
+                                    }
+                                }}
+                            />
+                            <Icon
+                                icon={IoIosSearch}
+                                size={14}
+                                color={"#727272"}
+                                onClick={() => {
+                                    goSearch();
+                                }}
+                            />
+                        </FlexBox>
+                    </div>
                     {accessToken ? (
                         <>
-                            <button className="user-button select-none flex items-center px-[7px] py-[4px] mr-[8px] md:p-[10px]">
+                            <button className="user-button select-none flex items-center px-[7px] py-[6px] mr-[8px]">
                                 <Icon icon={FaRegUser} size={12} />
-                                <div className="ml-2 md:font-16">{userId}</div>
+                                <div className="ml-2 md:font-14">{userId}</div>
                             </button>
                             <button
-                                className="user-button select-none flex items-center px-[7px] py-[4px] md:p-[10px]"
+                                className="user-button select-none flex items-center px-[7px] py-[6px]"
                                 onClick={() => {
                                     goLogout();
                                 }}
                             >
-                                <div className="md:font-16">로그아웃</div>
+                                <div className="md:font-14">로그아웃</div>
                             </button>
                         </>
                     ) : (
                         <>
                             <button
-                                className="user-button select-none flex items-center px-[7px] py-[4px] mr-[8px] md:p-[10px]"
+                                className="user-button select-none flex items-center px-[7px] py-[6px] mr-[8px]"
                                 onClick={() => {
-                                    goLogin();
+                                    navigate("/login");
                                 }}
                             >
                                 <Icon icon={FaRegUser} size={12} />
-                                <div className="ml-2 md:font-16">로그인</div>
+                                <div className="ml-2 md:font-14">로그인</div>
                             </button>
                             <button
-                                className="user-button select-none flex items-center px-[7px] py-[4px] md:p-[10px]"
+                                className="user-button select-none flex items-center px-[7px] py-[6px]"
                                 onClick={() => {
-                                    goJoin();
+                                    navigate("/join");
                                 }}
                             >
-                                <div className="md:font-16">회원가입</div>
+                                <div className="md:font-14">회원가입</div>
                             </button>
                         </>
                     )}
