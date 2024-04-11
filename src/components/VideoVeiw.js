@@ -1,13 +1,18 @@
 import React from "react";
+import { AiOutlineMore } from "react-icons/ai";
 import FlexBox from "./FlexBox";
+import Icon from "./Icon";
 
 const VideoVeiw = ({ mainVideoArr, title, subText, onClick }) => {
     return (
         <>
             <FlexBox justify="space-between" align="center" className="pb-[12px]">
                 <div className="font-24 color-green-5e font-medium">{title}</div>
-                <button className="font-13" onClick={onClick}>
+                <button className="font-13 hidden sm:contents" onClick={onClick}>
                     {subText}
+                </button>
+                <button className="contents sm:hidden">
+                    <Icon icon={AiOutlineMore} size={20} />
                 </button>
             </FlexBox>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[30px] pb-[40px]">

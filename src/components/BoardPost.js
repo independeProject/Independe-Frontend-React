@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PiNotePencil } from "react-icons/pi";
-import { useNavigate, useLocation } from "react-router-dom";
-import { regionBoardPost, postFixedPut, lifeBoardPost } from "../util/api";
+import { useLocation, useNavigate } from "react-router-dom";
+import { lifeBoardPost, postFixedPut, regionBoardPost } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";

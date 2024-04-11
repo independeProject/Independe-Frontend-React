@@ -7,30 +7,17 @@ import VideoVeiw from "../components/VideoVeiw";
 import { mainDataGet } from "../util/api.js";
 
 const MainPage = () => {
-    const [videosData, setVideosData] = useState([]);
-    const [mainVideoArr, setMainVideoArr] = useState([]);
-    const [todayMent, setTodayMent] = useState();
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [videosData]);
+    const [mainData, setMainData] = useState([]);
 
     useEffect(() => {
         mainDataGet()
             .then((res) => {
-                setVideosData(res.data.videoMainDtos);
-                setTodayMent(res.data.todayMent);
+                setMainData(res.data);
             })
             .catch((error) => {
                 console.error("MainDataGet error:", error);
             });
     }, []);
-
-    useEffect(() => {
-        const sliceVideosData = videosData;
-        const sliceResult = sliceVideosData.slice(0, 3);
-        setMainVideoArr(sliceResult);
-    }, [videosData]);
 
     return (
         <BodyContainer>
@@ -39,7 +26,7 @@ const MainPage = () => {
                     <span className="font-medium font-16 md:font-22 color-green-5e mr-[10px]">
                         Daily TIP.
                     </span>
-                    <span className="font-medium md:font-16">{todayMent} </span>
+                    <span className="font-medium md:font-16">{mainData?.todayMent} </span>
                 </div>
                 <div className="flex gap-[36px]">
                     <MainBoard title={"HOT 게시판"} subText={"더보기"} iconName={ImFire} />
@@ -60,7 +47,7 @@ const MainPage = () => {
                 </div>
             </div>
             <VideoVeiw
-                mainVideoArr={mainVideoArr}
+                mainVideoArr={mainData?.videoMainDtos}
                 title="자취 정보 영상"
                 subText="더 많은 영상 보기"
             />

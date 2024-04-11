@@ -5,6 +5,7 @@ import PostDetail from "./components/PostDetail";
 import MainBoardPage from "./screen/board/board_main";
 import MainLifePage from "./screen/life/life_main";
 import MainPage from "./screen/main";
+import SearchPage from "./screen/search";
 
 const routes = [
     {
@@ -34,6 +35,10 @@ const routes = [
     {
         path: "/life/:category",
         element: <MainLifePage />,
+    },
+    {
+        path: "/search",
+        element: <SearchPage />,
     },
 ];
 

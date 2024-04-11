@@ -36,6 +36,7 @@ const Table = ({
     setSearchButton,
     mainRoute,
     subRoute,
+    type,
 }) => {
     const dataArr = tableData?.data || tableData;
 
@@ -76,7 +77,7 @@ const Table = ({
                     {/*web용 테이블*/}
                     <div className="hidden md:contents">
                         <FlexRow className="border-b gap-[16px]">
-                            <FlexItem flex={2}>시각</FlexItem>
+                            <FlexItem flex={2}> {type === "search" ? "게시판" : "시각"}</FlexItem>
                             <FlexItem flex={4}>제목</FlexItem>
                             <FlexItem flex={2}>작성자</FlexItem>
                             <FlexItem>댓글</FlexItem>
@@ -90,35 +91,42 @@ const Table = ({
                                         style={{ textAlign: "left" }}
                                         key={index}
                                         onClick={() => {
-                                            navigate(`/posts/${item.postId}`, {
+                                            navigate(`/posts/${item?.postId}`, {
                                                 state: {
-                                                    postId: item.postId,
+                                                    postId: item?.postId,
                                                 },
                                             });
                                         }}
                                     >
                                         <FlexRow className="border-b gap-[16px]">
                                             <FlexItem flex={2}>
-                                                {formattedDate(item.createdDate)}
+                                                {type === "search"
+                                                    ? (item?.regionType || "자취") +
+                                                      " · " +
+                                                      (item?.regionPostType ||
+                                                          item?.independentPostType)
+                                                    : formattedDate(item?.createdDate)}
                                             </FlexItem>
-                                            <FlexItem flex={4}>{item.title}</FlexItem>
-                                            <FlexItem flex={2}>{item.nickName}</FlexItem>
+                                            <FlexItem flex={4}>{item?.title}</FlexItem>
+                                            <FlexItem flex={2}>
+                                                {item?.nickName || item?.nickname}
+                                            </FlexItem>
                                             <FlexItem>
                                                 <FlexBox>
                                                     {tableIcon(BiSolidCommentDetail)}
-                                                    {item.commentCount}
+                                                    {item?.commentCount}
                                                 </FlexBox>
                                             </FlexItem>
                                             <FlexItem>
                                                 <FlexBox>
                                                     {tableIcon(BiSolidLike)}
-                                                    {item.recommendCount}
+                                                    {item?.recommendCount}
                                                 </FlexBox>
                                             </FlexItem>
                                             <FlexItem>
                                                 <FlexBox>
                                                     {tableIcon(FaEye)}
-                                                    {item.views}
+                                                    {item?.views}
                                                 </FlexBox>
                                             </FlexItem>
                                         </FlexRow>
@@ -138,8 +146,8 @@ const Table = ({
                                 {dataArr?.map((item, index) => (
                                     <button style={{ textAlign: "left" }} key={index}>
                                         <FlexRow className="border-b gap-4">
-                                            <FlexItem flex={4}>{item.title}</FlexItem>
-                                            <FlexItem flex={1}>{item.nickName}</FlexItem>
+                                            <FlexItem flex={4}>{item?.title}</FlexItem>
+                                            <FlexItem flex={1}>{item?.nickName}</FlexItem>
                                         </FlexRow>
                                     </button>
                                 ))}
@@ -149,32 +157,36 @@ const Table = ({
                 </FlexContainer>
             </div>
             <FlexBox justify={"space-between"} className="font-14 py-[20px]">
-                <FlexBox className="table-search">
-                    <input
-                        placeholder="검색어를 입력하세요."
-                        value={searchText}
-                        onChange={(e) => {
-                            setSearchText(e.target.value);
-                        }}
-                    />
-                    <Icon
-                        icon={IoIosSearch}
-                        size={18}
-                        color={"#727272"}
-                        onClick={() => {
-                            setSearchButton(true);
-                        }}
-                    />
-                </FlexBox>
-                <Button
-                    type="green"
-                    onClick={() => {
-                        navigate("/write", {
-                            state: { mainRoute: mainRoute, subRoute: subRoute },
-                        });
-                    }}
-                    text={"글쓰기"}
-                ></Button>
+                {type !== "search" && (
+                    <>
+                        <FlexBox className="table-search">
+                            <input
+                                placeholder="검색어를 입력하세요."
+                                value={searchText}
+                                onChange={(e) => {
+                                    setSearchText(e.target.value);
+                                }}
+                            />
+                            <Icon
+                                icon={IoIosSearch}
+                                size={18}
+                                color={"#727272"}
+                                onClick={() => {
+                                    setSearchButton(true);
+                                }}
+                            />
+                        </FlexBox>
+                        <Button
+                            type="green"
+                            onClick={() => {
+                                navigate("/write", {
+                                    state: { mainRoute: mainRoute, subRoute: subRoute },
+                                });
+                            }}
+                            text={"글쓰기"}
+                        ></Button>
+                    </>
+                )}
             </FlexBox>
             <FlexBox justify="center" className="pb-[40px]">
                 {pageButtons()}
