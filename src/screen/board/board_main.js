@@ -26,6 +26,7 @@ const MainBoard = () => {
     const [tabCurrent, setTabCurrent] = useState(0);
     const [subTabCurrent, setSubTabCurrent] = useState(0);
     const [tableData, setTableData] = useState([]);
+    console.log("^^tableData", tableData);
     const [pageCurrent, setPageCurrent] = useState(1);
     const [mainRoute, setMainRoute] = useState("all");
     const [subRoute, setSubRoute] = useState("free");
@@ -64,7 +65,7 @@ const MainBoard = () => {
         const params = {
             regionType: local?.toUpperCase(),
             regionPostType: category?.toUpperCase(),
-            condition: "no",
+            condition: searchText !== null ? "title" : "no",
             keyword: searchText,
             pageable: { page: pageCurrent - 1, size: pageMax },
         };
@@ -156,6 +157,7 @@ const MainBoard = () => {
                 setSearchButton={setSearchButton}
                 mainRoute={mainRoute}
                 subRoute={subRoute}
+                title={boardLocalData[tabCurrent].title}
             ></Table>
         </BodyContainer>
     );

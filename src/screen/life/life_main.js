@@ -38,7 +38,7 @@ const MainLife = () => {
     useEffect(() => {
         const params = {
             independentPostType: category.toUpperCase(),
-            condition: "no",
+            condition: searchText !== null ? "title" : "no",
             keyword: searchText,
             pageable: { page: pageCurrent - 1, size: pageMax },
         };
@@ -99,6 +99,7 @@ const MainLife = () => {
                 searchText={searchText}
                 setSearchButton={setSearchButton}
                 mainRoute={mainRoute}
+                title={boardLocalData[tabCurrent].title}
             ></Table>
             {videoData && (
                 <VideoVeiw

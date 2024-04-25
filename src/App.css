@@ -10,6 +10,14 @@
     textarea:focus {
         outline: none;
     }
+    .dual-shadow {
+        box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .card {
+        border: 1px solid #5e913b;
+        border-radius: 12px;
+        padding: 16px 17px 0;
+    }
     .toggle-container {
         left: 47%;
     }
@@ -264,6 +272,9 @@
     /* Color */
     .color-gray-c7 {
         color: #c7c9cd;
+    }
+    .color-gray-96 {
+        color: #96a1aa;
     }
     .color-green-5e {
         color: #5e913b;

@@ -37,6 +37,7 @@ const Table = ({
     mainRoute,
     subRoute,
     type,
+    title,
 }) => {
     const dataArr = tableData?.data || tableData;
 
@@ -163,6 +164,11 @@ const Table = ({
                             <input
                                 placeholder="검색어를 입력하세요."
                                 value={searchText}
+                                onKeyUp={(e) => {
+                                    if (e.key === "Enter") {
+                                        setSearchButton(true);
+                                    }
+                                }}
                                 onChange={(e) => {
                                     setSearchText(e.target.value);
                                 }}
@@ -180,7 +186,11 @@ const Table = ({
                             type="green"
                             onClick={() => {
                                 navigate("/write", {
-                                    state: { mainRoute: mainRoute, subRoute: subRoute },
+                                    state: {
+                                        mainRoute: mainRoute,
+                                        subRoute: subRoute,
+                                        boardTitle: title,
+                                    },
                                 });
                             }}
                             text={"글쓰기"}

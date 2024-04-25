@@ -87,7 +87,7 @@ const BoardPost = () => {
             <div className="flex flex-col py-[24px] gap-[12px] lg:px-[10vw]">
                 <FlexBox>
                     <Icon icon={PiNotePencil} size={24} marginRight={6} />
-                    <div className="font-24 font-medium">자유게시판</div>
+                    <div className="font-24 font-medium">{location?.state?.boardTitle || ""}</div>
                 </FlexBox>
                 <FlexBox className="post-box font-16">
                     <input
