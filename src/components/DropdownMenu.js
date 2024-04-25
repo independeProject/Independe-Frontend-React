@@ -1,32 +1,55 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import FlexBox from "./FlexBox";
 import Icon from "./Icon";
 
 const DropdownMenu = ({ options, userNick, isOpen, setIsOpen }) => {
     const dropdownRef = useRef(null);
+    const buttonRef = useRef(null);
+    const navigate = useNavigate();
+
     const [localData, setLocalData] = useState(localStorage.getItem("local"));
+    const [isLargeScreen, setIsLargeScreen] = useState(false);
+    const [buttonWidth, setButtonWidth] = useState(0);
+    const [smButtonWidth, setSmButtonWidth] = useState(0);
+    console.log("^^isLargeScreen", isLargeScreen);
 
     const toggleMenuClick = () => {
         setIsOpen(!isOpen);
     };
 
-    const optionClick = (option) => {
-        console.log("Selected option:", option);
-    };
-
-    const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const optionClick = (index) => {
+        if (index === 0) {
+            navigate(`/myInfo/profile`);
+        }
+        if (index !== 2) {
             setIsOpen(false);
         }
     };
 
     useEffect(() => {
-        const initialLocalSwitchState = localStorage.getItem("localSwitchState") === "true";
-        setLocalSwitch(initialLocalSwitchState);
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth >= 786);
+            if (buttonRef.current) {
+                setButtonWidth(Math.floor(buttonRef.current.getBoundingClientRect().width) + 90);
+                setSmButtonWidth(Math.floor(buttonRef.current.getBoundingClientRect().width) + 75);
+            }
+        };
+
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
         document.addEventListener("click", handleClickOutside);
+
         return () => {
+            window.removeEventListener("resize", handleResize);
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
@@ -78,11 +101,15 @@ const DropdownMenu = ({ options, userNick, isOpen, setIsOpen }) => {
             <button
                 className="user-button select-none flex items-center px-[7px] py-[6px] mr-[8px]"
                 onClick={toggleMenuClick}
+                ref={buttonRef}
             >
                 <Icon icon={FaRegUser} size={12} />
                 <div className="ml-2 md:font-14">{userNick}</div>
             </button>
-            <ul className="dropdown-menu w-[131px] md:w-[153px] border">
+            <ul
+                className={`dropdown-menu border`}
+                style={{ minWidth: isLargeScreen ? buttonWidth : smButtonWidth }}
+            >
                 <button
                     className="user-button select-none flex items-center px-[7px] py-[6px] mr-[8px] mb-[8px]"
                     onClick={toggleMenuClick}
@@ -96,7 +123,7 @@ const DropdownMenu = ({ options, userNick, isOpen, setIsOpen }) => {
                         className={`dropdown-item font-13 ${
                             index === options.length - 1 ? "" : "border-b pointer"
                         }`}
-                        onClick={() => optionClick(option)}
+                        onClick={() => optionClick(index)}
                     >
                         <FlexBox justify="space-between" align="normal">
                             {option}

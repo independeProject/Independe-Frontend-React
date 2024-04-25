@@ -26,7 +26,7 @@ const MainPage = () => {
                     <span className="font-medium font-16 md:font-22 color-green-5e mr-[10px]">
                         Daily TIP.
                     </span>
-                    <span className="font-medium md:font-16">{mainData?.todayMent} </span>
+                    <span className="font-medium md:font-16">{mainData?.todayMent}</span>
                 </div>
                 <div className="flex gap-[36px]">
                     <MainBoard title={"HOT 게시판"} subText={"더보기"} iconName={ImFire} />

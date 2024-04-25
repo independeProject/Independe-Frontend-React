@@ -71,11 +71,7 @@ const Header = () => {
     };
 
     const navMenuClick = (index, link) => {
-        if (location.pathname === "/search") {
-            setTabCurrent(index);
-            navigate(link);
-        }
-        if (tabCurrent !== index) {
+        if (tabCurrent !== index || link !== location.pathname) {
             setTabCurrent(index);
             navigate(link);
         }
@@ -99,7 +95,7 @@ const Header = () => {
                         }}
                         src={LogoImg}
                         alt=""
-                        className="h-[40px] md:h-[70px] md:mr-8 cursor-pointer"
+                        className="h-[40px] md:h-[65px] md:mr-8 cursor-pointer"
                     />
                     <div className="hidden lg:inline-flex h-full">
                         <Nav className="flex">
@@ -132,7 +128,7 @@ const Header = () => {
                     </div>
                 </FlexBox>
                 <FlexBox>
-                    <div className="hidden sm:contents">
+                    <div className="hidden xl:contents">
                         <FlexBox className="table-search mr-[12px] md:font-14 mr-[20px]">
                             <input
                                 placeholder="검색어를 입력하세요."

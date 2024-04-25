@@ -1,11 +1,11 @@
 import axiosInstance from "./instance";
 
-export async function videosGet() {
+export async function myPageVideosGet() {
     try {
         const response = await axiosInstance.get("/api/videos");
         return response.data;
     } catch (error) {
-        console.error("videosGet API error:", error);
+        console.error("myPageVideosGet API error:", error);
         throw error;
     }
 }
@@ -72,11 +72,16 @@ export async function mainDataGet() {
 
 export async function regionBoardGet(params) {
     const { regionType, regionPostType, condition, keyword, pageable } = params;
+    const requestData = {
+        ...pageable,
+        keyword: keyword,
+        condition: condition,
+    };
 
     try {
         const response = await axiosInstance.get(
             `/api/posts/region/${regionType}/${regionPostType}`,
-            { params: pageable }
+            { params: requestData }
         );
         return response.data;
     } catch (error) {
@@ -155,10 +160,15 @@ export async function postDelete(postId) {
 
 export async function lifeBoardGet(params) {
     const { independentPostType, condition, keyword, pageable } = params;
+    const requestData = {
+        ...pageable,
+        keyword: keyword,
+        condition: condition,
+    };
 
     try {
         const response = await axiosInstance.get(`/api/posts/independent/${independentPostType}`, {
-            params: pageable,
+            params: requestData,
         });
         return response.data;
     } catch (error) {
@@ -194,6 +204,30 @@ export async function allSearchGet(params) {
         return response.data;
     } catch (error) {
         console.error("allSearchGet API error:", error);
+        throw error;
+    }
+}
+
+export async function memberGet() {
+    try {
+        const response = await axiosInstance.get(`/api/member`);
+        return response;
+    } catch (error) {
+        console.error("memberGet API error:", error);
+        throw error;
+    }
+}
+
+export async function memberPut(data) {
+    try {
+        const response = await axiosInstance.put(`/api/members`, data, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error("memberPut API error:", error);
         throw error;
     }
 }
