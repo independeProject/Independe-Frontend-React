@@ -1,10 +1,17 @@
 import React, { useLayoutEffect, useState } from "react";
 import { BsChevronRight } from "react-icons/bs";
-import { PiLink, PiStar } from "react-icons/pi";
+import { PiLink, PiStar, PiStarFill } from "react-icons/pi";
 import { VscComment } from "react-icons/vsc";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Slide, toast } from "react-toastify";
-import { boardPostGet, childCommentsPost, parentCommentsPost, postDelete } from "../util/api";
+import {
+    boardPostGet,
+    childCommentsPost,
+    favoritePost,
+    favoritePostGet,
+    parentCommentsPost,
+    postDelete,
+} from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
@@ -20,8 +27,11 @@ const PostDetail = () => {
     const userName = localStorage.getItem("user");
     const [commentReply, setCommentReply] = useState("");
     const [replyInput, setReplyInput] = useState([]);
+    const [favoriteState, setFavoriteState] = useState(false);
 
     useLayoutEffect(() => {
+        favoriteGetData();
+
         boardPostGet(id)
             .then((res) => {
                 setPostData({
@@ -34,6 +44,18 @@ const PostDetail = () => {
                 console.error("boardPostGet error:", error);
             });
     }, [id]);
+
+    const favoriteGetData = () => {
+        favoritePostGet()
+            .then((res) => {
+                if (res.data.some((item) => item.postId === Number(id)) === true) {
+                    setFavoriteState(true);
+                } else setFavoriteState(false);
+            })
+            .catch((error) => {
+                console.error("favoritePostGet error:", error);
+            });
+    };
 
     const toggleCommentInput = (index) => {
         setReplyInput((prevState) => {
@@ -85,7 +107,7 @@ const PostDetail = () => {
                 parentId: parentId,
                 content: commentReply,
             })
-                .then((res) => {
+                .then(() => {
                     window.location.reload();
                 })
                 .catch((error) => {
@@ -97,11 +119,22 @@ const PostDetail = () => {
     const deleteClick = () => {
         const postId = parseInt(location.state.postId);
         postDelete(postId)
-            .then((res) => {
+            .then(() => {
                 navigate(-1);
             })
             .catch((error) => {
                 console.error("postDelete error:", error);
+            });
+    };
+
+    const favoriteClick = () => {
+        const postId = parseInt(location.state.postId);
+        favoritePost(postId)
+            .then(() => {
+                favoriteGetData();
+            })
+            .catch((error) => {
+                console.error("favoritePost error:", error);
             });
     };
 
@@ -118,24 +151,40 @@ const PostDetail = () => {
                         icon={PiLink}
                         size={20}
                         marginRight={12}
-                        onClick={() =>
-                            toast.success(
-                                <div className="font-14">링크 복사가 완료되었습니다.</div>,
-                                {
-                                    position: "top-right",
-                                    autoClose: 1500,
-                                    hideProgressBar: false,
-                                    closeOnClick: true,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                    theme: "light",
-                                    transition: Slide,
-                                }
-                            )
-                        }
+                        onClick={() => {
+                            const currentUrl = window.location.href;
+                            navigator.clipboard
+                                .writeText(currentUrl)
+                                .then(() => {
+                                    toast.success(
+                                        <div className="font-14">링크 복사가 완료되었습니다.</div>,
+                                        {
+                                            position: "top-right",
+                                            autoClose: 1500,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                            theme: "light",
+                                            transition: Slide,
+                                        }
+                                    );
+                                })
+                                .catch((error) => {
+                                    console.error("URL 복사 실패:", error);
+                                    alert("URL을 클립보드에 복사하는 동안 오류가 발생했습니다.");
+                                });
+                        }}
                     />
-                    <Icon icon={PiStar} size={20} onClick={() => {}} />
+                    <Icon
+                        icon={favoriteState ? PiStarFill : PiStar}
+                        size={20}
+                        color={favoriteState && "gold"}
+                        onClick={() => {
+                            favoriteClick();
+                        }}
+                    />
                 </FlexBox>
             </FlexBox>
             {postData && (

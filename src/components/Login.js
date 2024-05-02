@@ -30,6 +30,7 @@ const Login = () => {
                 goMain();
             })
             .catch((error) => {
+                alert(error.response.data.message);
                 console.error("loginPost error:", error);
             })
             .finally(() => {});

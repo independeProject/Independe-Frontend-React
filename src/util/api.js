@@ -231,3 +231,33 @@ export async function memberPut(data) {
         throw error;
     }
 }
+
+export async function memberPasswordPut(data) {
+    try {
+        const response = await axiosInstance.put(`/api/members`, data);
+        return response;
+    } catch (error) {
+        console.error("memberPasswordPut API error:", error);
+        throw error;
+    }
+}
+
+export async function favoritePost(postId) {
+    try {
+        const response = await axiosInstance.post(`/api/favoritePost/${postId}`);
+        return response;
+    } catch (error) {
+        console.error("favoritePost API error:", error);
+        throw error;
+    }
+}
+
+export async function favoritePostGet() {
+    try {
+        const response = await axiosInstance.get("/api/favoritePost");
+        return response.data;
+    } catch (error) {
+        console.error("favoritePostGet API error:", error);
+        throw error;
+    }
+}

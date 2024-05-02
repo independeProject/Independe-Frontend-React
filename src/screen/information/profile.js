@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import FlexBox from "../../components/FlexBox";
 import Modal from "../../components/Modal";
-import { memberGet, memberPut } from "../../util/api";
+import { memberGet, memberPasswordPut, memberPut } from "../../util/api";
 
 const Profile = () => {
     const [userData, setUserData] = useState();
+    const [userInitialData, setUserInitialData] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [modalIndex, setModalIndex] = useState("");
@@ -18,34 +19,51 @@ const Profile = () => {
         { title: "이메일", type: "email" },
         { title: "전화번호", type: "number" },
     ];
-    let userInitialValue = null;
 
     const changeData = () => {
-        console.log("^^userData", userData);
         const params = {
             nickname: userData.nickname,
             email: userData.email,
             number: userData.number,
         };
-        memberPut(params)
-            .then((res) => {
-                console.log("^^res", res);
-                localStorage.setItem("user", userData.nickname);
-            })
-            .catch((error) => {
-                console.error("memberGet error:", error);
-            })
-            .finally(() => {
-                window.location.reload();
-            });
+
+        if (userData.password !== null) {
+            memberPasswordPut({ password: userData.password })
+                .then(() => {})
+                .catch((error) => {
+                    console.error("memberPasswordPut error:", error);
+                })
+                .finally(() => {
+                    memberPut(params)
+                        .then((res) => {
+                            localStorage.setItem("user", userData.nickname);
+                        })
+                        .catch((error) => {
+                            console.error("memberGet error:", error);
+                        })
+                        .finally(() => {
+                            window.location.reload();
+                        });
+                });
+        } else {
+            memberPut(params)
+                .then((res) => {
+                    localStorage.setItem("user", userData.nickname);
+                })
+                .catch((error) => {
+                    console.error("memberGet error:", error);
+                })
+                .finally(() => {
+                    window.location.reload();
+                });
+        }
     };
 
     useEffect(() => {
         memberGet()
             .then((res) => {
                 setUserData(res.data.data);
-                userInitialValue = res.data.data;
-                console.log("^^userInitialValue", userInitialValue);
+                setUserInitialData(res.data.data);
             })
             .catch((error) => {
                 console.error("memberGet error:", error);
@@ -92,20 +110,26 @@ const Profile = () => {
             <div className="card">
                 <FlexBox justify="space-between">
                     <div className="font-14 color-gray-96 font-medium">기본정보</div>
-                    <Button onClick={() => changeData()} text={"변경사항 저장하기"} info={true} />
+                    {userInitialData !== userData && (
+                        <Button
+                            onClick={() => changeData()}
+                            text={"변경사항 저장하기"}
+                            info={true}
+                        />
+                    )}
                 </FlexBox>
 
                 {userDataList?.map((item, index) => {
                     let type = item.type;
                     return (
-                        <>
+                        <div key={index}>
                             {profileListItem(
                                 userData?.[type],
                                 index === 0 ? null : "수정",
                                 index,
                                 type
                             )}
-                        </>
+                        </div>
                     );
                 })}
             </div>

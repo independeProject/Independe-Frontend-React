@@ -26,7 +26,6 @@ const MainBoard = () => {
     const [tabCurrent, setTabCurrent] = useState(0);
     const [subTabCurrent, setSubTabCurrent] = useState(0);
     const [tableData, setTableData] = useState([]);
-    console.log("^^tableData", tableData);
     const [pageCurrent, setPageCurrent] = useState(1);
     const [mainRoute, setMainRoute] = useState("all");
     const [subRoute, setSubRoute] = useState("free");
