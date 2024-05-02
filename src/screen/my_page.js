@@ -9,9 +9,7 @@ import { myPageVideosGet } from "../util/api.js";
 const MyPage = () => {
     useLayoutEffect(() => {
         myPageVideosGet()
-            .then((res) => {
-                console.log("^^res", res);
-            })
+            .then((res) => {})
             .catch((error) => {
                 console.error("myPageVideosGet error:", error);
             });
@@ -57,7 +55,7 @@ const MyPage = () => {
                         </div>
                     ))}
                 </div>
-                <div className="lg:py-[24px] lg:w-[90%] max-w-[800px]">
+                <div className="lg:py-[24px] lg:w-[90%]">
                     {tapCurrent === 0 ? (
                         <Profile />
                     ) : tapCurrent === 1 ? (

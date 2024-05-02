@@ -39,6 +39,8 @@ const Table = ({
     type,
     title,
 }) => {
+    const login = localStorage.getItem("user");
+
     const dataArr = tableData?.data || tableData;
 
     const navigate = useNavigate();
@@ -81,9 +83,13 @@ const Table = ({
                             <FlexItem flex={2}> {type === "search" ? "게시판" : "시각"}</FlexItem>
                             <FlexItem flex={4}>제목</FlexItem>
                             <FlexItem flex={2}>작성자</FlexItem>
-                            <FlexItem>댓글</FlexItem>
-                            <FlexItem>추천수</FlexItem>
-                            <FlexItem>조회수</FlexItem>
+                            {type !== "myPage" && (
+                                <>
+                                    <FlexItem>댓글</FlexItem>
+                                    <FlexItem>추천수</FlexItem>
+                                    <FlexItem>조회수</FlexItem>
+                                </>
+                            )}
                         </FlexRow>
                         {dataArr && (
                             <>
@@ -112,24 +118,28 @@ const Table = ({
                                             <FlexItem flex={2}>
                                                 {item?.nickName || item?.nickname}
                                             </FlexItem>
-                                            <FlexItem>
-                                                <FlexBox>
-                                                    {tableIcon(BiSolidCommentDetail)}
-                                                    {item?.commentCount}
-                                                </FlexBox>
-                                            </FlexItem>
-                                            <FlexItem>
-                                                <FlexBox>
-                                                    {tableIcon(BiSolidLike)}
-                                                    {item?.recommendCount}
-                                                </FlexBox>
-                                            </FlexItem>
-                                            <FlexItem>
-                                                <FlexBox>
-                                                    {tableIcon(FaEye)}
-                                                    {item?.views}
-                                                </FlexBox>
-                                            </FlexItem>
+                                            {type !== "myPage" && (
+                                                <>
+                                                    <FlexItem>
+                                                        <FlexBox>
+                                                            {tableIcon(BiSolidCommentDetail)}
+                                                            {item?.commentCount}
+                                                        </FlexBox>
+                                                    </FlexItem>
+                                                    <FlexItem>
+                                                        <FlexBox>
+                                                            {tableIcon(BiSolidLike)}
+                                                            {item?.recommendCount}
+                                                        </FlexBox>
+                                                    </FlexItem>
+                                                    <FlexItem>
+                                                        <FlexBox>
+                                                            {tableIcon(FaEye)}
+                                                            {item?.views}
+                                                        </FlexBox>
+                                                    </FlexItem>
+                                                </>
+                                            )}
                                         </FlexRow>
                                     </button>
                                 ))}
@@ -158,7 +168,7 @@ const Table = ({
                 </FlexContainer>
             </div>
             <FlexBox justify={"space-between"} className="font-14 py-[20px]">
-                {type !== "search" && (
+                {type !== "search" && !type === "myPage" && (
                     <>
                         <FlexBox className="table-search">
                             <input
@@ -182,19 +192,21 @@ const Table = ({
                                 }}
                             />
                         </FlexBox>
-                        <Button
-                            type="green"
-                            onClick={() => {
-                                navigate("/write", {
-                                    state: {
-                                        mainRoute: mainRoute,
-                                        subRoute: subRoute,
-                                        boardTitle: title,
-                                    },
-                                });
-                            }}
-                            text={"글쓰기"}
-                        ></Button>
+                        {login && (
+                            <Button
+                                type="green"
+                                onClick={() => {
+                                    navigate("/write", {
+                                        state: {
+                                            mainRoute: mainRoute,
+                                            subRoute: subRoute,
+                                            boardTitle: title,
+                                        },
+                                    });
+                                }}
+                                text={"글쓰기"}
+                            ></Button>
+                        )}
                     </>
                 )}
             </FlexBox>

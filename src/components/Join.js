@@ -69,7 +69,7 @@ const Join = () => {
 
     const inputList = ["", "", "아이디", "비밀번호", "닉네임", "이메일", "전화번호"];
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = () => {
         if (!privacyCheck(userData.password)) {
             return;
         }

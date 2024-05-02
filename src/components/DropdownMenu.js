@@ -14,7 +14,6 @@ const DropdownMenu = ({ options, userNick, isOpen, setIsOpen }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(false);
     const [buttonWidth, setButtonWidth] = useState(0);
     const [smButtonWidth, setSmButtonWidth] = useState(0);
-    console.log("^^isLargeScreen", isLargeScreen);
 
     const toggleMenuClick = () => {
         setIsOpen(!isOpen);
