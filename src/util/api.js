@@ -261,3 +261,23 @@ export async function favoritePostGet() {
         throw error;
     }
 }
+
+export async function reportPost(postId) {
+    try {
+        const response = await axiosInstance.post(`/api/reportPost/${postId}`);
+        return response;
+    } catch (error) {
+        console.error("reportPost API error:", error);
+        throw error;
+    }
+}
+
+export async function recommendPost(postId) {
+    try {
+        const response = await axiosInstance.post(`/api/recommendPost/${postId}`);
+        return response;
+    } catch (error) {
+        console.error("recommendPost API error:", error);
+        throw error;
+    }
+}

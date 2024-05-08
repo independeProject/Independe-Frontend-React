@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import FlexBox from "../../components/FlexBox";
 import Modal from "../../components/Modal";
-import { memberGet, memberPasswordPut, memberPut } from "../../util/api";
+import { memberGet, memberPasswordPut, memberPut, nickUniquePost } from "../../util/api";
+import { emailCheck, formatPhoneNumber } from "../../util/loginUtil";
 
 const Profile = () => {
     const [userData, setUserData] = useState();
@@ -11,6 +12,8 @@ const Profile = () => {
     const [modalType, setModalType] = useState(null);
     const [modalIndex, setModalIndex] = useState("");
     const [inputText, setInputText] = useState("");
+    const [description, setDescription] = useState("");
+    const [noChange, setNoChange] = useState(true);
 
     const userDataList = [
         { title: "아이디", type: "username" },
@@ -77,9 +80,10 @@ const Profile = () => {
             const modalData = userDataList[modalIndex]?.type;
             setInputText(userData?.[modalData]);
         }
-    }, [modalIndex]);
+    }, [isModalOpen]);
 
     const openModal = (type, index) => {
+        setDescription("");
         setIsModalOpen(true);
         setModalType(type);
         setModalIndex(index);
@@ -103,6 +107,36 @@ const Profile = () => {
                 )}
             </FlexBox>
         );
+    };
+
+    const phoneNumberCheck = (input) => {
+        const match = formatPhoneNumber(input);
+
+        if (match) {
+            setDescription("");
+            return match[1] + "-" + match[2] + "-" + match[3];
+        } else {
+            setDescription("휴대폰 번호 형식이 일치하지 않습니다.");
+            return input;
+        }
+    };
+
+    const nickNameUniqueChecker = (inputText) => {
+        if (inputText !== "") {
+            nickUniquePost({ nickname: inputText })
+                .then((res) => {
+                    if (userData.nickname === inputText) {
+                        setDescription("현재 아이디와 동일합니다.");
+                    } else if (res.idDuplicatedNot) {
+                        setDescription("사용할 수 있는 아이디 입니다.");
+                    } else {
+                        setDescription("이미 사용중인 아이디 입니다.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("nickUniquePost error:", error);
+                });
+        }
     };
 
     return (
@@ -138,7 +172,22 @@ const Profile = () => {
                     title={userDataList.find((item) => item.type === modalType).title + " 수정하기"}
                     onClose={closeModal}
                     value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
+                    onChange={(e) => {
+                        let targetValue = e.target.value;
+                        if (userDataList[modalIndex]?.type === "number") {
+                            targetValue = targetValue.slice(0, 13);
+                            targetValue = phoneNumberCheck(targetValue);
+                        }
+                        if (userDataList[modalIndex]?.type === "email" && !emailCheck(inputText)) {
+                            setDescription("올바른 이메일 양식이 아닙니다.");
+                        }
+                        if (targetValue === userData.nickname) {
+                            setNoChange(true);
+                        } else {
+                            setNoChange(false);
+                            setInputText(targetValue);
+                        }
+                    }}
                     inputFix={() => {
                         closeModal();
                         setUserData((prev) => ({
@@ -146,6 +195,12 @@ const Profile = () => {
                             [userDataList[modalIndex]?.type]: inputText,
                         }));
                     }}
+                    type={modalType}
+                    description={description}
+                    nickNameUniqueChecker={() => {
+                        nickNameUniqueChecker(inputText);
+                    }}
+                    noChange={noChange}
                 />
             )}
         </div>

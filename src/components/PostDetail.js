@@ -11,6 +11,8 @@ import {
     favoritePostGet,
     parentCommentsPost,
     postDelete,
+    recommendPost,
+    reportPost,
 } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
@@ -28,6 +30,7 @@ const PostDetail = () => {
     const [commentReply, setCommentReply] = useState("");
     const [replyInput, setReplyInput] = useState([]);
     const [favoriteState, setFavoriteState] = useState(false);
+    const [recommendDisable, setRecommendDisable] = useState(false);
 
     useLayoutEffect(() => {
         favoriteGetData();
@@ -138,6 +141,44 @@ const PostDetail = () => {
             });
     };
 
+    const reportClick = () => {
+        const postId = parseInt(location.state.postId);
+        reportPost(postId)
+            .then(() => {
+                alert("신고가 완료되었습니다.");
+            })
+            .catch((error) => {
+                console.error("reportPost error:", error);
+            });
+    };
+
+    const recommendClick = () => {
+        setRecommendDisable(true);
+
+        const postId = parseInt(location.state.postId);
+        recommendPost(postId)
+            .then((res) => {
+                console.log("^^reeee", res.data.data.recommendPostCount);
+                let count = 0;
+                if (res.data.data.recommendPostCount === 1) {
+                    count = 1;
+                } else if (res.data.data.recommendPostCount === 0) {
+                    count = -1;
+                }
+                setPostData((prevState) => ({
+                    ...prevState,
+                    recommendCount: postData.recommendCount + count,
+                }));
+            })
+            .catch((error) => {
+                console.error("recommendPost error:", error);
+            })
+            .finally(() => {
+                setRecommendDisable(false);
+            });
+    };
+
+    console.log("^^postData", postData);
     return (
         <BodyContainer className="py-[24px]">
             <FlexBox justify="space-between">
@@ -238,6 +279,27 @@ const PostDetail = () => {
                                 ></Button>
                             </FlexBox>
                         </>
+                    )}
+                    {userName && (
+                        <FlexBox justify="flex-end">
+                            <button
+                                className="mr-4"
+                                onClick={() => {
+                                    if (!recommendDisable) {
+                                        recommendClick();
+                                    }
+                                }}
+                            >
+                                추천하기
+                            </button>
+                            <button
+                                onClick={() => {
+                                    reportClick();
+                                }}
+                            >
+                                신고하기
+                            </button>
+                        </FlexBox>
                     )}
                     <div className="pt-[24px] pb-[10px] font-14">
                         댓글수 {postData.commentCount}
