@@ -301,3 +301,13 @@ export async function recommendCommentGet() {
         throw error;
     }
 }
+
+export async function myPostGet() {
+    try {
+        const response = await axiosInstance.get("/api/member/post");
+        return response.data;
+    } catch (error) {
+        console.error("myPostGet API error:", error);
+        throw error;
+    }
+}

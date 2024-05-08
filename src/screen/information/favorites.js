@@ -11,6 +11,7 @@ const Favorites = () => {
     useLayoutEffect(() => {
         favoritePostGet()
             .then((res) => {
+                console.log("^^sss", res.data);
                 setFavoriteData(res.data);
             })
             .catch((error) => {
