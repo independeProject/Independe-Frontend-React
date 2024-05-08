@@ -281,3 +281,23 @@ export async function recommendPost(postId) {
         throw error;
     }
 }
+
+export async function recommendCommentPost(commentId) {
+    try {
+        const response = await axiosInstance.post(`/api/recommendComment/${commentId}`);
+        return response;
+    } catch (error) {
+        console.error("recommendCommentPost API error:", error);
+        throw error;
+    }
+}
+
+export async function recommendCommentGet() {
+    try {
+        const response = await axiosInstance.get("/api/recommendComment");
+        return response.data;
+    } catch (error) {
+        console.error("recommendCommentGet API error:", error);
+        throw error;
+    }
+}

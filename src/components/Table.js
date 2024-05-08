@@ -72,6 +72,124 @@ const Table = ({
         return buttons;
     };
 
+    //마이페이지 활동내역 뷰
+    if (type === "comment") {
+        return (
+            <>
+                {/* className="hidden md:block" */}
+                <div>
+                    <FlexContainer className="font-13">
+                        {/*web용 테이블*/}
+                        <div className="hidden md:contents">
+                            <FlexRow className="border-b gap-[16px]">
+                                <FlexItem flex={2}>시각</FlexItem>
+                                <FlexItem flex={4}>제목</FlexItem>
+                                <FlexItem>조회수</FlexItem>
+                            </FlexRow>
+                            {dataArr && (
+                                <>
+                                    {dataArr?.map((item, index) => (
+                                        <button
+                                            style={{ textAlign: "left" }}
+                                            key={index}
+                                            onClick={() => {
+                                                navigate(`/posts/${item?.postId}`, {
+                                                    state: {
+                                                        postId: item?.postId,
+                                                    },
+                                                });
+                                            }}
+                                        >
+                                            <FlexRow className="border-b gap-[16px]">
+                                                <FlexItem flex={2}>
+                                                    {formattedDate(item?.createdDate)}
+                                                </FlexItem>
+                                                <FlexItem flex={4}>{item?.content}</FlexItem>
+
+                                                <FlexItem>
+                                                    <FlexBox>
+                                                        {tableIcon(FaEye)}
+                                                        {item?.totalCount || 0}
+                                                    </FlexBox>
+                                                </FlexItem>
+                                            </FlexRow>
+                                        </button>
+                                    ))}
+                                </>
+                            )}
+                        </div>
+                        {/*mobile용 테이블*/}
+                        <div className="contents md:hidden">
+                            <FlexRow className="border-b gap-4">
+                                <FlexItem flex={4}>제목</FlexItem>
+                                <FlexItem flex={1}>작성자</FlexItem>
+                            </FlexRow>
+                            {dataArr && (
+                                <>
+                                    {dataArr?.map((item, index) => (
+                                        <button style={{ textAlign: "left" }} key={index}>
+                                            <FlexRow className="border-b gap-4">
+                                                <FlexItem flex={4}>{item?.title}</FlexItem>
+                                                <FlexItem flex={1}>{item?.nickName}</FlexItem>
+                                            </FlexRow>
+                                        </button>
+                                    ))}
+                                </>
+                            )}
+                        </div>
+                    </FlexContainer>
+                </div>
+                <FlexBox justify={"space-between"} className="font-14 py-[20px]">
+                    {type !== "search" && !type === "myPage" && (
+                        <>
+                            <FlexBox className="table-search">
+                                <input
+                                    placeholder="검색어를 입력하세요."
+                                    value={searchText}
+                                    onKeyUp={(e) => {
+                                        if (e.key === "Enter") {
+                                            setSearchButton(true);
+                                        }
+                                    }}
+                                    onChange={(e) => {
+                                        setSearchText(e.target.value);
+                                    }}
+                                />
+                                <Icon
+                                    icon={IoIosSearch}
+                                    size={18}
+                                    color={"#727272"}
+                                    onClick={() => {
+                                        setSearchButton(true);
+                                    }}
+                                />
+                            </FlexBox>
+                            {login && (
+                                <Button
+                                    type="green"
+                                    onClick={() => {
+                                        navigate("/write", {
+                                            state: {
+                                                mainRoute: mainRoute,
+                                                subRoute: subRoute,
+                                                boardTitle: title,
+                                            },
+                                        });
+                                    }}
+                                    text={"글쓰기"}
+                                ></Button>
+                            )}
+                        </>
+                    )}
+                </FlexBox>
+                <FlexBox justify="center" className="pb-[40px]">
+                    {pageButtons()}
+                </FlexBox>
+            </>
+        );
+    }
+
+    //게시글쪽 뷰
     return (
         <>
             {/* className="hidden md:block" */}

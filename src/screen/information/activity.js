@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
+import { recommendCommentGet } from "../../util/api";
 
 const Activity = () => {
     const [pageCurrent, setPageCurrent] = useState(1);
-
     const pageMax = 10;
+
+    const [recommendData, setRecommendData] = useState(null);
+    useEffect(() => {
+        recommendCommentGet()
+            .then((res) => {
+                setRecommendData(res.data);
+            })
+            .catch((error) => {
+                console.error("recommendCommentGet error:", error);
+            });
+    }, []);
+
+    console.log("^^recommendData", recommendData);
 
     return (
         <div>
@@ -12,8 +25,8 @@ const Activity = () => {
                 <div className="font-20 font-semi-bold">{"활동내역 목록"} </div>
             </div>
             <Table
-                type="myPage"
-                // tableData={favoriteData}
+                type="comment"
+                tableData={recommendData}
                 pageMax={pageMax}
                 setPageCurrent={setPageCurrent}
                 pageCurrent={pageCurrent}
