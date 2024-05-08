@@ -261,3 +261,43 @@ export async function favoritePostGet() {
         throw error;
     }
 }
+
+export async function reportPost(postId) {
+    try {
+        const response = await axiosInstance.post(`/api/reportPost/${postId}`);
+        return response;
+    } catch (error) {
+        console.error("reportPost API error:", error);
+        throw error;
+    }
+}
+
+export async function recommendPost(postId) {
+    try {
+        const response = await axiosInstance.post(`/api/recommendPost/${postId}`);
+        return response;
+    } catch (error) {
+        console.error("recommendPost API error:", error);
+        throw error;
+    }
+}
+
+export async function recommendCommentPost(commentId) {
+    try {
+        const response = await axiosInstance.post(`/api/recommendComment/${commentId}`);
+        return response;
+    } catch (error) {
+        console.error("recommendCommentPost API error:", error);
+        throw error;
+    }
+}
+
+export async function recommendCommentGet() {
+    try {
+        const response = await axiosInstance.get("/api/recommendComment");
+        return response.data;
+    } catch (error) {
+        console.error("recommendCommentGet API error:", error);
+        throw error;
+    }
+}

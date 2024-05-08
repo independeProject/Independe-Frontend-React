@@ -45,9 +45,13 @@ const MyPage = () => {
                     {tapList?.map((item, index) => (
                         <div key={index}>
                             <button
-                                className="font-14 lg:px-[20px] lg:py-[4px]"
+                                className="font-14 lg:px-[20px] lg:py-[4px] font-medium"
                                 onClick={() => {
                                     pageChange(item, index);
+                                }}
+                                style={{
+                                    color: tapCurrent === index ? "#5e913b" : "black",
+                                    transition: "color 0.3s, border-bottom 0.3s",
                                 }}
                             >
                                 {item?.title}

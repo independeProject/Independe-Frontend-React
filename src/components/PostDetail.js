@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { BsChevronRight } from "react-icons/bs";
 import { PiLink, PiStar, PiStarFill } from "react-icons/pi";
-import { VscComment } from "react-icons/vsc";
+import { VscComment, VscSparkle } from "react-icons/vsc";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Slide, toast } from "react-toastify";
 import {
@@ -11,6 +11,10 @@ import {
     favoritePostGet,
     parentCommentsPost,
     postDelete,
+    recommendCommentGet,
+    recommendCommentPost,
+    recommendPost,
+    reportPost,
 } from "../util/api";
 import BodyContainer from "./BodyContainer";
 import Button from "./Button";
@@ -28,10 +32,12 @@ const PostDetail = () => {
     const [commentReply, setCommentReply] = useState("");
     const [replyInput, setReplyInput] = useState([]);
     const [favoriteState, setFavoriteState] = useState(false);
+    const [recommendDisable, setRecommendDisable] = useState(false);
+    const [recommendData, setRecommendData] = useState(null);
 
     useLayoutEffect(() => {
         favoriteGetData();
-
+        recommendCommentGetData();
         boardPostGet(id)
             .then((res) => {
                 setPostData({
@@ -44,6 +50,16 @@ const PostDetail = () => {
                 console.error("boardPostGet error:", error);
             });
     }, [id]);
+
+    const recommendCommentGetData = () => {
+        recommendCommentGet()
+            .then((res) => {
+                setRecommendData(res.data);
+            })
+            .catch((error) => {
+                console.error("recommendCommentGet error:", error);
+            });
+    };
 
     const favoriteGetData = () => {
         favoritePostGet()
@@ -136,6 +152,60 @@ const PostDetail = () => {
             .catch((error) => {
                 console.error("favoritePost error:", error);
             });
+    };
+
+    const reportClick = () => {
+        const postId = parseInt(location.state.postId);
+        reportPost(postId)
+            .then(() => {
+                alert("신고가 완료되었습니다.");
+            })
+            .catch((error) => {
+                console.error("reportPost error:", error);
+            });
+    };
+
+    const recommendClick = () => {
+        setRecommendDisable(true);
+
+        const postId = parseInt(location.state.postId);
+        recommendPost(postId)
+            .then((res) => {
+                let count = 0;
+                if (res.data.data.recommendPostCount === 1) {
+                    count = 1;
+                } else if (res.data.data.recommendPostCount === 0) {
+                    count = -1;
+                }
+                setPostData((prevState) => ({
+                    ...prevState,
+                    recommendCount: postData.recommendCount + count,
+                }));
+            })
+            .catch((error) => {
+                console.error("recommendPost error:", error);
+            })
+            .finally(() => {
+                setRecommendDisable(false);
+            });
+    };
+
+    const commentLikeClick = (commentId) => {
+        recommendCommentPost(commentId)
+            .then((res) => {
+                recommendCommentGetData();
+                alert("추천이 완료되었습니다.");
+            })
+            .catch((error) => {
+                console.error("reportPost error:", error);
+            });
+    };
+
+    const recommendColor = (id) => {
+        const filteredComments = recommendData?.filter(
+            (parentComment) => parentComment.commentId === id
+        );
+        return filteredComments?.length > 0;
     };
 
     return (
@@ -239,6 +309,27 @@ const PostDetail = () => {
                             </FlexBox>
                         </>
                     )}
+                    {userName && (
+                        <FlexBox justify="flex-end">
+                            <button
+                                className="mr-4"
+                                onClick={() => {
+                                    if (!recommendDisable) {
+                                        recommendClick();
+                                    }
+                                }}
+                            >
+                                추천하기
+                            </button>
+                            <button
+                                onClick={() => {
+                                    reportClick();
+                                }}
+                            >
+                                신고하기
+                            </button>
+                        </FlexBox>
+                    )}
                     <div className="pt-[24px] pb-[10px] font-14">
                         댓글수 {postData.commentCount}
                     </div>
@@ -272,11 +363,24 @@ const PostDetail = () => {
                                             <div>{parentComment.nickname}</div>
                                             {formatDate(parentComment.createdDate, "comment")}
                                         </div>
-                                        <Icon
-                                            icon={VscComment}
-                                            size={13}
-                                            onClick={() => toggleCommentInput(index)}
-                                        />
+                                        <FlexBox className="gap-4">
+                                            <Icon
+                                                icon={VscSparkle}
+                                                size={13}
+                                                color={
+                                                    recommendColor(parentComment?.commentId) &&
+                                                    "gold"
+                                                }
+                                                onClick={() =>
+                                                    commentLikeClick(parentComment.commentId)
+                                                }
+                                            />
+                                            <Icon
+                                                icon={VscComment}
+                                                size={13}
+                                                onClick={() => toggleCommentInput(index)}
+                                            />
+                                        </FlexBox>
                                     </div>
                                     <div>{parentComment.content}</div>
                                 </div>

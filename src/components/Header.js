@@ -78,11 +78,13 @@ const Header = () => {
     };
 
     useLayoutEffect(() => {
-        if (location.pathname === "/" || location.pathname === "/search") {
+        if (location.pathname === "/") {
             setTabCurrent(0);
         } else if (location.pathname.includes("/board/")) {
             setTabCurrent(1);
-        } else if (location.pathname.includes("/life")) setTabCurrent(2);
+        } else if (location.pathname.includes("/life")) {
+            setTabCurrent(2);
+        } else setTabCurrent(null);
     }, [location.pathname]);
 
     return (

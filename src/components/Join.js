@@ -4,6 +4,7 @@ import styled from "styled-components";
 import BodyContainer from "../components/BodyContainer";
 import { constant } from "../constants/constant";
 import { idUniquePost, joinPost, nickUniquePost } from "../util/api";
+import { emailCheck, formatPhoneNumber } from "../util/loginUtil";
 import Button from "./Button";
 import FlexBox from "./FlexBox";
 
@@ -132,12 +133,6 @@ const Join = () => {
         }
     };
 
-    const emailCheck = (email) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const result = regex.test(email);
-        return result;
-    };
-
     const termsUseView = () => {
         return (
             <div className="flex flex-col">
@@ -206,9 +201,9 @@ const Join = () => {
         );
     };
 
-    const formatPhoneNumber = (input) => {
-        const cleaned = ("" + input).replace(/\D/g, "");
-        const match = cleaned.match(/^(\d{3})(\d{4})(\d{4})$/);
+    const phoneNumberChecker = (input) => {
+        const match = formatPhoneNumber(input);
+
         if (match) {
             setPhoneCheck(true);
             return match[1] + "-" + match[2] + "-" + match[3];
@@ -328,7 +323,7 @@ const Join = () => {
                                                                         13
                                                                     );
                                                                     targetValue =
-                                                                        formatPhoneNumber(
+                                                                        phoneNumberChecker(
                                                                             targetValue
                                                                         );
                                                                 }
