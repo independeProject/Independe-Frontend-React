@@ -194,7 +194,6 @@ const PostDetail = () => {
         recommendCommentPost(commentId)
             .then((res) => {
                 recommendCommentGetData();
-                alert("추천이 완료되었습니다.");
             })
             .catch((error) => {
                 console.error("reportPost error:", error);

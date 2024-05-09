@@ -77,7 +77,7 @@ const Table = ({
         return (
             <>
                 {/* className="hidden md:block" */}
-                <div>
+                <div className="pb-[40px]">
                     <FlexContainer className="font-13">
                         {/*web용 테이블*/}
                         <div className="hidden md:contents">
@@ -104,7 +104,9 @@ const Table = ({
                                                 <FlexItem flex={2}>
                                                     {formattedDate(item?.createdDate)}
                                                 </FlexItem>
-                                                <FlexItem flex={4}>{item?.content}</FlexItem>
+                                                <FlexItem flex={4}>
+                                                    {item?.content || item?.title}
+                                                </FlexItem>
 
                                                 <FlexItem>
                                                     <FlexBox>
@@ -121,16 +123,18 @@ const Table = ({
                         {/*mobile용 테이블*/}
                         <div className="contents md:hidden">
                             <FlexRow className="border-b gap-4">
-                                <FlexItem flex={4}>제목</FlexItem>
-                                <FlexItem flex={1}>작성자</FlexItem>
+                                <FlexItem flex={2}>시각</FlexItem>
+                                <FlexItem flex={1}>제목</FlexItem>
                             </FlexRow>
                             {dataArr && (
                                 <>
                                     {dataArr?.map((item, index) => (
                                         <button style={{ textAlign: "left" }} key={index}>
                                             <FlexRow className="border-b gap-4">
-                                                <FlexItem flex={4}>{item?.title}</FlexItem>
-                                                <FlexItem flex={1}>{item?.nickName}</FlexItem>
+                                                <FlexItem flex={2}>
+                                                    {formattedDate(item?.createdDate)}
+                                                </FlexItem>
+                                                <FlexItem flex={1}>{item?.content}</FlexItem>
                                             </FlexRow>
                                         </button>
                                     ))}
@@ -139,49 +143,6 @@ const Table = ({
                         </div>
                     </FlexContainer>
                 </div>
-                <FlexBox justify={"space-between"} className="font-14 py-[20px]">
-                    {type !== "search" && !type === "myPage" && (
-                        <>
-                            <FlexBox className="table-search">
-                                <input
-                                    placeholder="검색어를 입력하세요."
-                                    value={searchText}
-                                    onKeyUp={(e) => {
-                                        if (e.key === "Enter") {
-                                            setSearchButton(true);
-                                        }
-                                    }}
-                                    onChange={(e) => {
-                                        setSearchText(e.target.value);
-                                    }}
-                                />
-                                <Icon
-                                    icon={IoIosSearch}
-                                    size={18}
-                                    color={"#727272"}
-                                    onClick={() => {
-                                        setSearchButton(true);
-                                    }}
-                                />
-                            </FlexBox>
-                            {login && (
-                                <Button
-                                    type="green"
-                                    onClick={() => {
-                                        navigate("/write", {
-                                            state: {
-                                                mainRoute: mainRoute,
-                                                subRoute: subRoute,
-                                                boardTitle: title,
-                                            },
-                                        });
-                                    }}
-                                    text={"글쓰기"}
-                                ></Button>
-                            )}
-                        </>
-                    )}
-                </FlexBox>
                 <FlexBox justify="center" className="pb-[40px]">
                     {pageButtons()}
                 </FlexBox>
@@ -276,7 +237,7 @@ const Table = ({
                                     <button style={{ textAlign: "left" }} key={index}>
                                         <FlexRow className="border-b gap-4">
                                             <FlexItem flex={4}>{item?.title}</FlexItem>
-                                            <FlexItem flex={1}>{item?.nickName}</FlexItem>
+                                            <FlexItem flex={1}>{item?.nickname}</FlexItem>
                                         </FlexRow>
                                     </button>
                                 ))}
@@ -286,7 +247,7 @@ const Table = ({
                 </FlexContainer>
             </div>
             <FlexBox justify={"space-between"} className="font-14 py-[20px]">
-                {type !== "search" && !type === "myPage" && (
+                {type !== "search" && type !== "myPage" && (
                     <>
                         <FlexBox className="table-search">
                             <input
