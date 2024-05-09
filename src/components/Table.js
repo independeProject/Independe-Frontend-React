@@ -77,7 +77,7 @@ const Table = ({
         return (
             <>
                 {/* className="hidden md:block" */}
-                <div>
+                <div className="pb-[40px]">
                     <FlexContainer className="font-13">
                         {/*web용 테이블*/}
                         <div className="hidden md:contents">
@@ -104,7 +104,9 @@ const Table = ({
                                                 <FlexItem flex={2}>
                                                     {formattedDate(item?.createdDate)}
                                                 </FlexItem>
-                                                <FlexItem flex={4}>{item?.content}</FlexItem>
+                                                <FlexItem flex={4}>
+                                                    {item?.content || item?.title}
+                                                </FlexItem>
 
                                                 <FlexItem>
                                                     <FlexBox>

@@ -232,9 +232,9 @@ export async function memberPut(data) {
     }
 }
 
-export async function memberPasswordPut(data) {
+export async function memberPasswordPut(password) {
     try {
-        const response = await axiosInstance.put(`/api/members`, data);
+        const response = await axiosInstance.put(`/api/members/password`, password);
         return response;
     } catch (error) {
         console.error("memberPasswordPut API error:", error);
@@ -308,6 +308,26 @@ export async function myPostGet() {
         return response.data;
     } catch (error) {
         console.error("myPostGet API error:", error);
+        throw error;
+    }
+}
+
+export async function myCommnetGet() {
+    try {
+        const response = await axiosInstance.get("/api/member/comment");
+        return response.data;
+    } catch (error) {
+        console.error("myCommnetGet API error:", error);
+        throw error;
+    }
+}
+
+export async function recommendPostGet() {
+    try {
+        const response = await axiosInstance.get("/api/recommendPost");
+        return response.data;
+    } catch (error) {
+        console.error("recommendPostGet API error:", error);
         throw error;
     }
 }

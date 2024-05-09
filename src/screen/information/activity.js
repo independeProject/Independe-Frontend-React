@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
-import { myPostGet, recommendCommentGet } from "../../util/api";
+import { myCommnetGet, myPostGet, recommendCommentGet, recommendPostGet } from "../../util/api";
 
 const Activity = () => {
     const [pageCurrent, setPageCurrent] = useState(1);
@@ -11,16 +11,34 @@ const Activity = () => {
 
     const [recommendData, setRecommendData] = useState(null);
     const [myPostData, setMyPostData] = useState(null);
+    const [myCommnedData, setMyCommnedData] = useState(null);
+    const [recommendPostData, setRecommendPostData] = useState(null);
+
     useEffect(() => {
         myPostGet()
             .then((res) => {
-                console.log("^^res", res);
                 setMyPostData(res.data);
                 //작성한글 초기값
                 setShowData(res.data);
             })
             .catch((error) => {
                 console.error("myPostGet error:", error);
+            });
+
+        myCommnetGet()
+            .then((res) => {
+                setMyCommnedData(res.data);
+            })
+            .catch((error) => {
+                console.error("myCommnetGet error:", error);
+            });
+
+        recommendPostGet()
+            .then((res) => {
+                setRecommendPostData(res.data);
+            })
+            .catch((error) => {
+                console.error("recommendCommentGet error:", error);
             });
 
         recommendCommentGet()
@@ -42,11 +60,13 @@ const Activity = () => {
     useEffect(() => {
         if (subTabCurrent === 0) {
             setShowData(myPostData);
+        } else if (subTabCurrent === 1) {
+            setShowData(myCommnedData);
         } else if (subTabCurrent === 2) {
-            setShowData(recommendData);
-        } else setShowData("");
+            setShowData(recommendPostData);
+        } else setShowData(recommendData);
     }, [subTabCurrent]);
-    console.log("^^myPostData", myPostData);
+
     return (
         <div>
             <div className="flex flex-col sm:flex-row gap-[12px] md:gap-14">
@@ -74,7 +94,7 @@ const Activity = () => {
                     </div>
                 ))}
             </div>
-            <div className="font-16 border-b py-4 px-[10px]">
+            <div className="font-16 border-b py-4 px-[10px] font-medium">
                 {subTabData[subTabCurrent].title} 내역
             </div>
             <Table
