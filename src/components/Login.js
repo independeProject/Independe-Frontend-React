@@ -24,6 +24,7 @@ const Login = () => {
 
         loginPost(loginData)
             .then((res) => {
+                console.log("^^res", res);
                 const decodedToken = jwtDecode(res.headers.authorization);
                 localStorage.setItem("accessToken", res.headers.authorization);
                 localStorage.setItem("user", decodedToken.nickname);

@@ -23,6 +23,9 @@ const DropdownMenu = ({ options, userNick, isOpen, setIsOpen }) => {
         if (index === 0) {
             navigate(`/myInfo/profile`);
         }
+        if (index === 1) {
+            navigate(`/chatting`);
+        }
         if (index !== 2) {
             setIsOpen(false);
         }
