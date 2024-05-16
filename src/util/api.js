@@ -42,7 +42,9 @@ export async function idUniquePost(data) {
 
 export async function loginPost(data) {
     try {
-        const response = await axiosInstance.post("/api/member/login", data);
+        const response = await axiosInstance.post("/api/member/login", data, {
+            withCredentials: true,
+        });
         return response;
     } catch (error) {
         console.error("loginPost API error:", error);
@@ -50,9 +52,9 @@ export async function loginPost(data) {
     }
 }
 
-export async function refreshTokenPost(data) {
+export async function refreshTokenPost() {
     try {
-        const response = await axiosInstance.post("/api/refreshToken", data);
+        const response = await axiosInstance.post("/api/refreshToken");
         return response.data;
     } catch (error) {
         console.error("refreshTokenPost API error:", error);

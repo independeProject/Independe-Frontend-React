@@ -3,6 +3,7 @@ import Join from "./components/Join";
 import Login from "./components/Login";
 import PostDetail from "./components/PostDetail";
 import MainBoardPage from "./screen/board/board_main";
+import Chatting from "./screen/information/chatting";
 import MainLifePage from "./screen/life/life_main";
 import MainPage from "./screen/main";
 import MyPage from "./screen/my_page";
@@ -44,6 +45,10 @@ const routes = [
     {
         path: "/myInfo/:tabName",
         element: <MyPage />,
+    },
+    {
+        path: "/chatting",
+        element: <Chatting />,
     },
 ];
 

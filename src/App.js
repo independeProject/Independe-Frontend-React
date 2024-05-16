@@ -29,7 +29,7 @@ function App() {
                     </div>
                 </>
             )}
-            <div className="flex flex-col justify-between h-[100vh]">
+            <div className="flex flex-col justify-between min-h-[100vh]">
                 <div>
                     {headerView && <div className="pt-[60px] md:pt-[90px] w-full" />}
                     <ToastContainer />
@@ -43,7 +43,7 @@ function App() {
                         ))}
                     </Routes>
                 </div>
-                {headerView && <Footer />}
+                {location.pathname !== "/chatting" && headerView && <Footer />}
             </div>
         </div>
     );
