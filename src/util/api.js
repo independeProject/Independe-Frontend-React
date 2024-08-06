@@ -333,3 +333,23 @@ export async function recommendPostGet() {
         throw error;
     }
 }
+
+export async function chatRoomGet() {
+    try {
+        const response = await axiosInstance.get("/api/chat/rooms");
+        return response.data;
+    } catch (error) {
+        console.error("chatRoomGet API error:", error);
+        throw error;
+    }
+}
+
+export async function chathistoryGet(chatRoomId) {
+    try {
+        const response = await axiosInstance.get("/api/chat/history", { params: { chatRoomId } });
+        return response.data;
+    } catch (error) {
+        console.error("chathistoryGet API error:", error);
+        throw error;
+    }
+}
