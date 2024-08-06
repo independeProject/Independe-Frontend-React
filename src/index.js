@@ -5,6 +5,7 @@ import { RecoilRoot } from "recoil";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import * as encoding from "text-encoding";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
